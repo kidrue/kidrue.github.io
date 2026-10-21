@@ -1,0 +1,78 @@
+name: 部署博客到阿里云
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kidrue-blog-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    timeout-minutes: 120
+    env:
+      ALIYUN_PLATFORM: ${{ vars.ALIYUN_PLATFORM || 'linux/amd64' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: 安装、类型检查和回归测试
+        run: |
+          npm ci
+          for file in deploy/*.sh; do bash -n "$file"; done
+          npm run typecheck
+          npx playwright install --with-deps chrome
+          npm test
+          npm run build
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - name: 构建、检查生产容器并打包
+        run: |
+          [[ "$ALIYUN_PLATFORM" =~ ^linux/(amd64|arm64)$ ]]
+          for target in api tools web; do
+            docker buildx build --platform "$ALIYUN_PLATFORM" --target "$target" --build-arg "REVISION=$GITHUB_SHA" --load -t "kidrue-blog-$target:$GITHUB_SHA" .
+          done
+          docker pull --platform "$ALIYUN_PLATFORM" postgres:16-bookworm
+          docker tag postgres:16-bookworm "kidrue-blog-postgres:$GITHUB_SHA"
+          npm run deploy:smoke -- "$GITHUB_SHA"
+          mkdir -p bundle/content
+          docker save "kidrue-blog-api:$GITHUB_SHA" "kidrue-blog-tools:$GITHUB_SHA" "kidrue-blog-web:$GITHUB_SHA" "kidrue-blog-postgres:$GITHUB_SHA" | gzip > bundle/content/images.tar.gz
+          cp deploy/deploy.sh deploy/site.sh deploy/cleanup-images.sh deploy/compose.production.yaml bundle/content/
+          tar -czf bundle/release.tar.gz -C bundle/content .
+          (cd bundle && sha256sum release.tar.gz > release.sha256)
+      - name: 上传并部署，配置域名和 HTTPS
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ALIYUN_HOST: ${{ secrets.ALIYUN_HOST }}
+          ALIYUN_USER: ${{ secrets.ALIYUN_USER }}
+          ALIYUN_SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          ALIYUN_SSH_KNOWN_HOSTS: ${{ secrets.ALIYUN_SSH_KNOWN_HOSTS }}
+          ALIYUN_SSH_PORT: ${{ vars.ALIYUN_SSH_PORT || '22' }}
+          ALIYUN_DEPLOY_PATH: ${{ vars.ALIYUN_DEPLOY_PATH || '/opt/kidrue-blog' }}
+          ALIYUN_COMPOSE_PROJECT: ${{ vars.ALIYUN_COMPOSE_PROJECT || 'kidrue-blog' }}
+          BLOG_DOMAIN: ${{ vars.BLOG_DOMAIN || 'kidrue.top' }}
+          BLOG_WEB_PORT: ${{ vars.BLOG_WEB_PORT || '18080' }}
+          BLOG_API_PORT: ${{ vars.BLOG_API_PORT || '13001' }}
+          ALIYUN_PUBLIC_IPV4: ${{ vars.ALIYUN_PUBLIC_IPV4 }}
+          CERTBOT_EMAIL: ${{ vars.CERTBOT_EMAIL }}
+          ALIYUN_DNS_ACCESS_KEY_ID: ${{ secrets.ALIYUN_DNS_ACCESS_KEY_ID }}
+          ALIYUN_DNS_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_DNS_ACCESS_KEY_SECRET }}
+          ALIYUN_DNS_SECURITY_TOKEN: ${{ secrets.ALIYUN_DNS_SECURITY_TOKEN }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
+          IMGUR_ACCESS_TOKEN: ${{ secrets.IMGUR_ACCESS_TOKEN }}
+          MAX_IMAGE_BYTES: ${{ vars.MAX_IMAGE_BYTES || '10485760' }}
+          MAX_VIDEO_BYTES: ${{ vars.MAX_VIDEO_BYTES || '104857600' }}
+        run: node scripts/deploy/ship.mjs

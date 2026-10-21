@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "127.0.0.1:5433:5432"
+    environment:
+      POSTGRES_DB: kidrue_blog
+      POSTGRES_USER: kidrue
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?请设置 POSTGRES_PASSWORD}
+    volumes:
+      - kidrue-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kidrue -d kidrue_blog"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  kidrue-postgres:

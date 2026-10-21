@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: kidrue-blog-postgres:${BLOG_IMAGE_TAG:?缺少发布版本}
+    pull_policy: never
+    restart: unless-stopped
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U kidrue_blog -d kidrue_blog"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  migrate:
+    image: kidrue-blog-tools:${BLOG_IMAGE_TAG:?缺少发布版本}
+    pull_policy: never
+    profiles: [tools]
+    command: [npm, run, db:migrate]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  api:
+    image: kidrue-blog-api:${BLOG_IMAGE_TAG:?缺少发布版本}
+    pull_policy: never
+    restart: unless-stopped
+    stop_grace_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - target: 3001
+        published: ${BLOG_API_PORT:-13001}
+        host_ip: 127.0.0.1
+        protocol: tcp
+    volumes:
+      - media:/app/.data/videos
+  web:
+    image: kidrue-blog-web:${BLOG_IMAGE_TAG:?缺少发布版本}
+    pull_policy: never
+    restart: unless-stopped
+    ports:
+      - target: 8080
+        published: ${BLOG_WEB_PORT:-18080}
+        host_ip: 127.0.0.1
+        protocol: tcp
+volumes:
+  postgres:
+  media:

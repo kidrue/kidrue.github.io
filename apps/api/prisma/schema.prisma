@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Article {
+  id String @id
+  title String
+  description String @default("")
+  category String
+  tags String[]
+  body String
+  coverUrl String @default("")
+  status String @default("draft")
+  date String
+  readTime Int @default(1)
+  revision Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([status, updatedAt])
+  @@map("kidrue_articles")
+}
+
+model Session {
+  id String @id
+  expiresAt DateTime
+  @@index([expiresAt])
+  @@map("kidrue_sessions")
+}

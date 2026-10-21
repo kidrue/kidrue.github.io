@@ -1,0 +1,46 @@
+{
+  "name": "kidrue-blog",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "npm run build -w @kidrue/shared && npm run db:generate -w @kidrue/api",
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "node scripts/dev.mjs --web",
+    "dev:api": "node scripts/dev.mjs --api",
+    "build:web": "npm run build -w @kidrue/shared && npm run build -w @kidrue/web",
+    "build:api": "npm run build -w @kidrue/shared && npm run build -w @kidrue/api",
+    "build": "npm run build -w @kidrue/shared && npm run build -w @kidrue/api && npm run build -w @kidrue/web",
+    "preview": "npm run preview -w @kidrue/web",
+    "start": "npm run start -w @kidrue/api",
+    "test": "npm run test:tooling && npm run test:api && npm run test:web",
+    "test:tooling": "node --test scripts/*.test.mjs",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test:web": "playwright test",
+    "test:api": "npm run test -w @kidrue/api",
+    "db:dev": "npm run db:dev -w @kidrue/api",
+    "db:generate": "npm run db:generate -w @kidrue/api",
+    "db:migrate": "npm run db:migrate -w @kidrue/api",
+    "deploy:check": "node scripts/deploy/sync-github.mjs",
+    "deploy:sync": "node scripts/deploy/sync-github.mjs --apply",
+    "deploy:preflight": "node scripts/deploy/preflight.mjs",
+    "deploy:smoke": "node scripts/deploy/smoke.mjs",
+    "test:deploy": "node --test scripts/deploy.test.mjs",
+    "check:a11y": "node scripts/check-accessibility.mjs",
+    "capture": "node scripts/capture-preview.mjs"
+  },
+  "devDependencies": {
+    "@alicloud/alidns20150109": "^4.6.1",
+    "@alicloud/openapi-client": "^0.4.15",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^22.10.0",
+    "prettier": "^3.9.10",
+    "typescript": "~5.9.3",
+    "yaml": "^2.9.1"
+  }
+}
