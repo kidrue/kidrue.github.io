@@ -1,0 +1,12 @@
+[
+  {
+    "canonicalId": "cnblogs-16168835",
+    "duplicateIds": ["cnblogs-16168761", "csdn-125887469", "csdn-126431160"],
+    "reason": "完整度优先：主版本包含分支、暂存、回滚以及 pull.rebase 补充，覆盖其余三个版本的主要内容。"
+  },
+  {
+    "canonicalId": "cnblogs-15394013",
+    "duplicateIds": ["csdn-120707002"],
+    "reason": "完整度相当：两篇提供相同的路由监听方案，保留创建于 16:51 的博客园版本，早于 CSDN 的 16:59:38。"
+  }
+]

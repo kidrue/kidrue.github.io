@@ -1,0 +1,357 @@
+{
+  "source": "https://www.cnblogs.com/Kidrue",
+  "importedAt": "2026-10-26T07:55:51.169Z",
+  "expectedCount": 17,
+  "importedCount": 17,
+  "imageCount": 7,
+  "articles": [
+    {
+      "id": "cnblogs-17015145",
+      "title": "typescript循环依赖error",
+      "author": "kidrue",
+      "date": "2022-12-30",
+      "createdAt": "2022-12-30T16:05:00+08:00",
+      "updatedAt": "2022-12-30T16:06:00+08:00",
+      "category": "技术",
+      "tags": [
+        "踩坑记录"
+      ],
+      "description": "或 类似上述代码则会造成以下异常error 解决办法： 解开文件之间的循环依赖即可，切忌文件之间不可相互依赖",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/17015145.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "踩坑记录"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-12-30-17015145.md"
+    },
+    {
+      "id": "cnblogs-16881139",
+      "title": "斐波那契数列求第n项值",
+      "author": "kidrue",
+      "date": "2022-11-11",
+      "createdAt": "2022-11-11T17:14:00+08:00",
+      "updatedAt": "2022-11-11T17:42:00+08:00",
+      "category": "技术",
+      "tags": [
+        "算法"
+      ],
+      "description": "斐波那契数列 已知： 斐波那契数列第n项是除前两项以外，第n-2与第n-1项的和：S(n) = S(n-2) + S(n-1)。 优化前 优化后",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/16881139.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "算法"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-11-11-16881139.md"
+    },
+    {
+      "id": "cnblogs-16586039",
+      "title": "2022-07",
+      "author": "kidrue",
+      "date": "2022-08-14",
+      "createdAt": "2022-08-14T18:48:00+08:00",
+      "updatedAt": "2022-08-14T18:48:00+08:00",
+      "category": "生活",
+      "tags": [
+        "追番记录"
+      ],
+      "description": "2022-8-14 契约之吻 2022-8-14 overload",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/16586039.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "追番记录"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-08-14-16586039.md"
+    },
+    {
+      "id": "cnblogs-16334358",
+      "title": "引入依赖less项目时报错",
+      "author": "kidrue",
+      "date": "2022-06-01",
+      "createdAt": "2022-06-01T15:17:00+08:00",
+      "updatedAt": "2022-06-01T15:17:00+08:00",
+      "category": "技术",
+      "tags": [
+        "vite"
+      ],
+      "description": "21:50:31 [vite] Internal server error: Preprocessor dependency \"less\" not found. Did you install it? 只需要执行 npm install less -D 将其加入开发者依赖则不会出现上述错误",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/16334358.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "vite"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-06-01-16334358.md"
+    },
+    {
+      "id": "cnblogs-16168835",
+      "title": "git工作使用",
+      "author": "kidrue",
+      "date": "2022-04-20",
+      "createdAt": "2022-04-20T10:38:00+08:00",
+      "updatedAt": "2023-09-10T19:19:00+08:00",
+      "category": "技术",
+      "tags": [
+        "git"
+      ],
+      "description": "首先克隆一份代码下来（默认main分支）。 git clone https://github.com/kidrue/gittest.git 创建并切换分支开始工作（分支相当于一个独立的版本，以创建分支时的为版本保存新分支）。 git checkout -b dev 或 git switch -c dev 创建并切换到d",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/16168835.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "git"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-04-20-16168835.md"
+    },
+    {
+      "id": "cnblogs-16168761",
+      "title": "git 的基础使用",
+      "author": "kidrue",
+      "date": "2022-04-20",
+      "createdAt": "2022-04-20T10:25:00+08:00",
+      "updatedAt": "2022-04-20T10:25:00+08:00",
+      "category": "技术",
+      "tags": [],
+      "description": "首先克隆一份代码下来（默认main分支） git clone https://github.com/kidrue/gittest.git 创建并切换分支开始工作（分支相当于一个独立的版本，以创建分支时的为版本保存新分支） git checkout -b dev 创建并切换到dev分支 git push --set-up",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/articles/16168761.html",
+      "sourceType": "文章",
+      "sourceCategories": [],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2022-04-20-16168761.md"
+    },
+    {
+      "id": "cnblogs-15394013",
+      "title": "vue第二次进入时created方法不执行",
+      "author": "kidrue",
+      "date": "2021-10-11",
+      "createdAt": "2021-10-11T16:51:00+08:00",
+      "updatedAt": "2022-04-07T17:54:00+08:00",
+      "category": "技术",
+      "tags": [
+        "JavaScript",
+        "Vue"
+      ],
+      "description": "解决方案：",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15394013.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "JavaScript",
+        "Vue"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-10-11-15394013.md"
+    },
+    {
+      "id": "cnblogs-15393808",
+      "title": "前端常用css库",
+      "author": "kidrue",
+      "date": "2021-10-11",
+      "createdAt": "2021-10-11T16:13:00+08:00",
+      "updatedAt": "2021-10-11T16:13:00+08:00",
+      "category": "技术",
+      "tags": [
+        "常用框架网站"
+      ],
+      "description": "样式ui组件库：https://www.tailwindcss.cn/docs 动画库： animate.css：https://www.dowebok.com/demo/2014/98/ swiper.js:https://www.swiper.com.cn/",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15393808.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "常用框架网站"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-10-11-15393808.md"
+    },
+    {
+      "id": "cnblogs-15356822",
+      "title": "js获取当前平台类型",
+      "author": "kidrue",
+      "date": "2021-09-30",
+      "createdAt": "2021-09-30T15:02:00+08:00",
+      "updatedAt": "2021-09-30T15:02:00+08:00",
+      "category": "技术",
+      "tags": [
+        "JavaScript"
+      ],
+      "description": "navigator.platform",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15356822.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "JavaScript"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-09-30-15356822.md"
+    },
+    {
+      "id": "cnblogs-15345979",
+      "title": "js中的函数提升及变量提升，块级作用域",
+      "author": "kidrue",
+      "date": "2021-09-27",
+      "createdAt": "2021-09-27T23:57:00+08:00",
+      "updatedAt": "2021-09-28T00:19:00+08:00",
+      "category": "技术",
+      "tags": [
+        "JavaScript"
+      ],
+      "description": "函数提升及变量提升： js中在函数作用域或全局作用域中通过关键字var声明的变量，无论是在哪里声明的，都会被当场当前作用域顶部声明的变量。（即为变量提升） 函数提升同理在当前作用域中通过function声明的函数，无论是在哪里声明的，都会被当成顶部声明的函数 块级声明： 1.块级声明用于声明在指定块的作用域之外无法访问",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15345979.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "JavaScript"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-09-27-15345979.md"
+    },
+    {
+      "id": "cnblogs-15309313",
+      "title": "react设置组件参数默认值及参数类型",
+      "author": "kidrue",
+      "date": "2021-09-18",
+      "createdAt": "2021-09-18T16:46:00+08:00",
+      "updatedAt": "2021-09-18T18:20:00+08:00",
+      "category": "技术",
+      "tags": [
+        "react学习笔记"
+      ],
+      "description": "props是常量不允许修改 React通过propTypes来设置参数类型。例： React通过propTypes来设置参数类型。例：",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15309313.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "react学习笔记"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-09-18-15309313.md"
+    },
+    {
+      "id": "cnblogs-15214728",
+      "title": "react第一天",
+      "author": "kidrue",
+      "date": "2021-09-01",
+      "createdAt": "2021-09-01T15:13:00+08:00",
+      "updatedAt": "2021-09-15T17:53:00+08:00",
+      "category": "技术",
+      "tags": [
+        "react学习笔记"
+      ],
+      "description": "在jsx的语法中你可以在大括号内放置任何游戏啊哦的javaScript表达式. react是将内部的将行为和逻辑和dom耦合在一起的。 在react中，属性中嵌入javaScriot表达式时，不要再大括号外面加上引号。你应该仅使用引号（对于字符串值或大括号（对于表达式）中的一个，对于同一属性不能同时使用着两种符号。 R",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15214728.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "react学习笔记"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-09-01-15214728.md"
+    },
+    {
+      "id": "cnblogs-15090487",
+      "title": "js原型链的定义",
+      "author": "kidrue",
+      "date": "2021-08-02",
+      "createdAt": "2021-08-02T16:35:00+08:00",
+      "updatedAt": "2021-08-02T16:35:00+08:00",
+      "category": "技术",
+      "tags": [],
+      "description": "当我们读取obj.toString的时候，js引擎首先会做下面的事情： 1.看看obj对象是否有toString这个属性。如果没有就会进行下一步 2.读取obj._proto_的属性中是否有这个toString属性。如果没有便会查看obj.proto._proto_是否有这个属性 3.直到obj.proto.proto",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/15090487.html",
+      "sourceType": "随笔",
+      "sourceCategories": [],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-08-02-15090487.md"
+    },
+    {
+      "id": "cnblogs-14886471",
+      "title": "Router中query传参和params传参的区别",
+      "author": "kidrue",
+      "date": "2021-06-15",
+      "createdAt": "2021-06-15T17:45:00+08:00",
+      "updatedAt": "2021-09-01T14:50:00+08:00",
+      "category": "技术",
+      "tags": [],
+      "description": "刷新前： 刷新后： 结论： query方式：传参数是会显示在地址栏，必须使用key-value传参，刷新时不会丢失参数，但参数会被全部转换为字符串格式。（当没有传key值时，跳转路由后无法接收参数） params方式：传参数是不会显示在地址栏，也不用以key-value的方式传参，刷新后会丢失参数。（当没有传key值时",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/14886471.html",
+      "sourceType": "随笔",
+      "sourceCategories": [],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-06-15-14886471.md"
+    },
+    {
+      "id": "cnblogs-14885401",
+      "title": "钩子函数定义",
+      "author": "kidrue",
+      "date": "2021-06-15",
+      "createdAt": "2021-06-15T14:39:00+08:00",
+      "updatedAt": "2021-06-15T14:43:00+08:00",
+      "category": "技术",
+      "tags": [
+        "Vue"
+      ],
+      "description": "钩子函数是windows消息处理机制得一部分,通过设置\"钩子\",应用程序可以在系统级对所有消息、时间进行过滤，访问在正常情况下无法访问的消息。钩子的本质是一段用以 处理系统消息的程序，通过系统调用，把它挂入系统。",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/14885401.html",
+      "sourceType": "随笔",
+      "sourceCategories": [
+        "Vue"
+      ],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-06-15-14885401.md"
+    },
+    {
+      "id": "cnblogs-14777129",
+      "title": "研究while 和 for  在选择排序下执行效率",
+      "author": "kidrue",
+      "date": "2021-05-17",
+      "createdAt": "2021-05-17T15:31:00+08:00",
+      "updatedAt": "2021-09-01T15:02:00+08:00",
+      "category": "技术",
+      "tags": [],
+      "description": "` var arr = []; var i = 0; while (i < 5000) { arr[i] = (Math.random()).toFixed(2) i++ }; var Date1 = (new Date).getTime(); console.log(Date1); for (let i = 0; i",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/14777129.html",
+      "sourceType": "随笔",
+      "sourceCategories": [],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-05-17-14777129.md"
+    },
+    {
+      "id": "cnblogs-14722910",
+      "title": "Vue动态复制",
+      "author": "kidrue",
+      "date": "2021-04-30",
+      "createdAt": "2021-04-30T17:46:00+08:00",
+      "updatedAt": "2021-09-01T14:57:00+08:00",
+      "category": "技术",
+      "tags": [],
+      "description": "//npm install clipboard --save import Clipboard from \"clipboard\"; export default { name: \"performance\", data() { return { copyContent: \"http://112.uve97a.cn/?ic",
+      "source": "博客园",
+      "sourceUrl": "https://www.cnblogs.com/Kidrue/p/14722910.html",
+      "sourceType": "随笔",
+      "sourceCategories": [],
+      "sourceTags": [],
+      "file": "apps/web/src/content/posts/2021-04-30-14722910.md"
+    }
+  ],
+  "images": {
+    "https://img2023.cnblogs.com/blog/2349615/202212/2349615-20221230155720976-1620834082.png": "/images/posts/cnblogs/986ef301934d7494.png",
+    "https://img2020.cnblogs.com/blog/2349615/202109/2349615-20210927235417097-123982550.png": "/images/posts/cnblogs/76d9a3537f467ac1.png",
+    "https://img2020.cnblogs.com/blog/2349615/202109/2349615-20210928001435967-15511517.png": "/images/posts/cnblogs/d28c276f921578a6.png",
+    "https://img2020.cnblogs.com/blog/2349615/202106/2349615-20210615173500029-87485030.png": "/images/posts/cnblogs/aadd828a234ac634.png",
+    "https://img2020.cnblogs.com/blog/2349615/202106/2349615-20210615173841781-1765904818.png": "/images/posts/cnblogs/fe917721b5ea7605.png",
+    "https://img2020.cnblogs.com/blog/2349615/202106/2349615-20210615173923467-475904096.png": "/images/posts/cnblogs/4df16972178764fe.png",
+    "https://img2020.cnblogs.com/blog/2349615/202105/2349615-20210517142527299-277749266.png": "/images/posts/cnblogs/57e33d2f0bff3d63.png"
+  }
+}

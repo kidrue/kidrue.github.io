@@ -1,4 +1,4 @@
-import { expect, test } from "./fixtures";
+import { expect, test, localPostCount } from "./fixtures";
 
 test("移动菜单展开后的 Tab 进入导航，Escape 返回菜单按钮", async ({
   page,
@@ -17,40 +17,46 @@ test("移动菜单展开后的 Tab 进入导航，Escape 返回菜单按钮", as
   await expect(toggle).toHaveAttribute("aria-expanded", "false");
 });
 
-test("分类只显示对应文章，并能恢复全部六篇", async ({ page }) => {
+test("分类只显示对应文章，并能恢复全部导入文章", async ({ page }) => {
   await page.goto("/blog");
-  await expect(page.getByRole("article")).toHaveCount(6);
+  await expect(page.getByRole("article")).toHaveCount(localPostCount);
   await page.getByRole("button", { name: "技术", exact: true }).click();
-  await expect(page.getByRole("article")).toHaveCount(3);
+  await expect(page.getByRole("article")).toHaveCount(localPostCount - 1);
   await expect(
-    page.getByRole("article").filter({ hasText: "周末，去山野里充个电" }),
+    page
+      .getByRole("article")
+      .filter({
+        has: page.getByRole("button", { name: "阅读：2022-07", exact: true }),
+      }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "生活", exact: true }).click();
-  await expect(page.getByRole("article")).toHaveCount(3);
+  await expect(page.getByRole("article")).toHaveCount(1);
   await expect(
-    page.getByRole("article").filter({ hasText: "周末，去山野里充个电" }),
+    page
+      .getByRole("article")
+      .filter({
+        has: page.getByRole("button", { name: "阅读：2022-07", exact: true }),
+      }),
   ).toHaveCount(1);
   await page
     .getByRole("group", { name: "文章分类" })
     .getByRole("button", { name: "全部", exact: true })
     .click();
-  await expect(page.getByRole("article")).toHaveCount(6);
+  await expect(page.getByRole("article")).toHaveCount(localPostCount);
 });
 
 test("阅读弹窗显示正文，支持 Escape 并将焦点还给原文章", async ({ page }) => {
   await page.goto("/blog");
   const read = page.getByRole("button", {
-    name: "阅读：把个人博客，写成自己的样子",
+    name: "阅读：typescript循环依赖error",
   });
   await read.click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await expect(
-    dialog.getByRole("heading", { name: "把个人博客，写成自己的样子" }),
+    dialog.getByRole("heading", { name: "typescript循环依赖error" }),
   ).toBeVisible();
-  await expect(
-    dialog.getByText("从一张白纸开始", { exact: true }),
-  ).toBeVisible();
+  await expect(dialog.getByText("解决办法：", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(read).toBeFocused();
@@ -59,12 +65,12 @@ test("阅读弹窗显示正文，支持 Escape 并将焦点还给原文章", asy
 test("阅读弹窗关闭按钮和遮罩可关闭内容", async ({ page }) => {
   await page.goto("/blog");
   await page
-    .getByRole("button", { name: "阅读：把个人博客，写成自己的样子" })
+    .getByRole("button", { name: "阅读：typescript循环依赖error" })
     .click();
   await page.getByRole("button", { name: "关闭文章" }).click();
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await page
-    .getByRole("button", { name: "阅读：把个人博客，写成自己的样子" })
+    .getByRole("button", { name: "阅读：typescript循环依赖error" })
     .click();
   await page.mouse.click(3, 3);
   await expect(page.getByRole("dialog")).not.toBeVisible();

@@ -1,4 +1,4 @@
-import { expect, hitokotoFixture, test } from "./fixtures";
+import { expect, hitokotoFixture, test, localPostCount } from "./fixtures";
 import type { Route } from "@playwright/test";
 
 test("进入博客先播放起飞效果，返回入口后仍可再次进入", async ({ page }) => {
@@ -112,7 +112,7 @@ test("暗色入口展示昵称、头像、社交链接和每日一言", async ({
   await expect(
     page.getByRole("navigation", { name: "主导航", includeHidden: true }),
   ).toHaveCount(1);
-  await expect(page.getByRole("article")).toHaveCount(6);
+  await expect(page.getByRole("article")).toHaveCount(localPostCount);
   await page.getByRole("link", { name: "kidrue 首页" }).first().click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("navigation")).toHaveCount(0);

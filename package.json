@@ -13,6 +13,7 @@
     "dev:web": "node scripts/dev.mjs --web",
     "dev:api": "node scripts/dev.mjs --api",
     "build:web": "npm run build -w @kidrue/shared && npm run build -w @kidrue/web",
+    "build:pages": "node scripts/build-pages.mjs",
     "build:api": "npm run build -w @kidrue/shared && npm run build -w @kidrue/api",
     "build": "npm run build -w @kidrue/shared && npm run build -w @kidrue/api && npm run build -w @kidrue/web",
     "preview": "npm run preview -w @kidrue/web",
@@ -21,6 +22,7 @@
     "test:tooling": "node --test scripts/*.test.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test:web": "playwright test",
+    "test:diary": "playwright test --config playwright.diary.config.ts",
     "test:api": "npm run test -w @kidrue/api",
     "db:dev": "npm run db:dev -w @kidrue/api",
     "db:generate": "npm run db:generate -w @kidrue/api",
@@ -39,7 +41,10 @@
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.56.0",
     "@types/node": "^22.10.0",
+    "cheerio": "^1.2.0",
     "prettier": "^3.9.10",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "~5.9.3",
     "yaml": "^2.9.1"
   }

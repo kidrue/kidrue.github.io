@@ -11,10 +11,13 @@ import {
 import { type Category, type Post } from "../data/posts";
 import usePublishedPosts from "../hooks/usePublishedPosts";
 import PostCard from "./PostCard";
+import ArticleTimeline from "./ArticleTimeline";
+import ViewSwitcher, { type ListView } from "./ViewSwitcher";
 
 function matchesQuery(post: Post, query: string): boolean {
   const text = [
     post.title,
+    ...(post.searchAliases ?? []),
     post.description,
     post.body ?? "",
     ...post.tags,
@@ -39,6 +42,7 @@ export default function ArticlesSection({
   const [category, setCategory] = useState<"全部" | Category>("全部");
   const [query, setQuery] = useState("");
   const [tag, setTag] = useState("");
+  const [view, setView] = useState<ListView>("timeline");
   const searchRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const hasFilters =
@@ -170,13 +174,16 @@ export default function ArticlesSection({
           {error}
         </p>
       )}
-      {visiblePosts.length > 0 ? (
+      <ViewSwitcher value={view} onChange={setView} label="文章展示方式" />
+      {visiblePosts.length > 0 && view === "timeline" ? (
+        <ArticleTimeline posts={visiblePosts} onRead={onRead} />
+      ) : visiblePosts.length > 0 ? (
         <div className="posts-grid">
           {visiblePosts.map((post) => (
             <PostCard
               key={post.id}
               post={post}
-              featured={post.id === "my-little-corner"}
+              featured={post.id === posts[0]?.id}
               onRead={onRead}
             />
           ))}

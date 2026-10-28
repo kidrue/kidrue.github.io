@@ -45,7 +45,11 @@ export default function PostCard({
                 <Pin size={11} /> 精选 ·{" "}
               </>
             )}
-            {post.example !== false ? "示例" : "原创"}
+            {post.example !== false
+              ? "示例"
+              : post.sourceType === "转载"
+                ? "转载"
+                : "原创"}
           </span>
         </div>
         <h3>

@@ -1030,6 +1030,7 @@ export const layoutStyles = css`
   }
   .reading-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 17px;
     color: var(--muted);
     font-size: 11px;
@@ -1038,6 +1039,11 @@ export const layoutStyles = css`
     display: flex;
     align-items: center;
     gap: 6px;
+  }
+  .reading-source a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .reading-intro {
     margin: 27px 0 32px !important;

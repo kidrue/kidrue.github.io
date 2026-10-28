@@ -74,6 +74,28 @@ export const AnimeGrid = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+  .anime-month-heading {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--muted);
+    margin-top: 24px;
+  }
+  .anime-month-heading:first-child {
+    margin-top: 0;
+  }
+  .anime-month-heading h3 {
+    margin: 0;
+    font-size: 21px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .anime-month-heading span {
+    font-size: 12px;
+    color: var(--muted);
+  }
   @media (max-width: 1000px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 25px 20px;

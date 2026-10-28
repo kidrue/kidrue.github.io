@@ -1,4 +1,15 @@
 import { expect, test as base } from "@playwright/test";
+import cnblogsImport from "../docs/cnblogs-import.json" with { type: "json" };
+import csdnImport from "../docs/csdn-import.json" with { type: "json" };
+import duplicateGroups from "../apps/web/src/data/post-duplicates.json" with { type: "json" };
+
+export const localPostCount =
+  cnblogsImport.importedCount +
+  csdnImport.importedCount -
+  duplicateGroups.reduce(
+    (count, group) => count + group.duplicateIds.length,
+    0,
+  );
 
 export const hitokotoFixture = {
   id: 100,

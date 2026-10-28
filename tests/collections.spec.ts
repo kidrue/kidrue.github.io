@@ -1,11 +1,11 @@
 import { expect, test } from "./fixtures";
 
 test("兴趣收藏可以切换动漫和手办，并显示对应记录", async ({ page }) => {
-  await page.goto("/blog#collections");
+  await page.goto("/interests");
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
-  await expect(section.getByRole("listitem")).toHaveCount(8);
+  await expect(section.getByRole("listitem")).toHaveCount(151);
   await expect(
-    section.getByRole("heading", { name: "葬送的芙莉莲" }),
+    section.getByRole("heading", { name: "刀剑神域（第 1、2 季）" }),
   ).toBeVisible();
   await section
     .getByRole("button", { name: "收藏的手办", exact: true })
@@ -15,11 +15,11 @@ test("兴趣收藏可以切换动漫和手办，并显示对应记录", async ({
     section.getByRole("heading", { name: "魔女旅人" }),
   ).toBeVisible();
   await expect(
-    section.getByRole("heading", { name: "葬送的芙莉莲" }),
+    section.getByRole("heading", { name: "刀剑神域（第 1、2 季）" }),
   ).toHaveCount(0);
   await section.getByRole("button", { name: "番剧记录", exact: true }).click();
   await expect(
-    section.getByRole("heading", { name: "葬送的芙莉莲" }),
+    section.getByRole("heading", { name: "刀剑神域（第 1、2 季）" }),
   ).toBeVisible();
   await expect(section.getByRole("heading", { name: "魔女旅人" })).toHaveCount(
     0,
@@ -27,15 +27,22 @@ test("兴趣收藏可以切换动漫和手办，并显示对应记录", async ({
 });
 
 test("动漫和手办记录可展开详情，切换分类后恢复收起", async ({ page }) => {
-  await page.goto("/blog#collections");
+  await page.goto("/interests");
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
-  const firstRecord = section.getByRole("listitem").first();
+  const firstRecord = section
+    .getByRole("listitem")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "刀剑神域（第 1、2 季）",
+        exact: true,
+      }),
+    });
   await firstRecord
-    .getByLabel("查看观后感：葬送的芙莉莲", { exact: true })
+    .getByLabel("查看观后感：刀剑神域（第 1、2 季）", { exact: true })
     .click();
   await expect(
     firstRecord.getByText(
-      "这里可以写下观后感、喜欢的角色，以及想要重温的片段。",
+      "看过第 1、2 季，合并为一条观看记录；封面使用第 1 季海报。",
     ),
   ).toBeVisible();
   await section
@@ -54,7 +61,7 @@ test("动漫和手办记录可展开详情，切换分类后恢复收起", async
   await section.getByRole("button", { name: "番剧记录", exact: true }).click();
   await expect(
     firstRecord.getByText(
-      "这里可以写下观后感、喜欢的角色，以及想要重温的片段。",
+      "看过第 1、2 季，合并为一条观看记录；封面使用第 1 季海报。",
     ),
   ).not.toBeVisible();
 });
@@ -80,19 +87,44 @@ test("开发项目区展示真实本站和明确标注的示例，项目说明�
   await expect(page).toHaveURL(/\/$/);
 });
 
-test("导航可以到达收藏和项目，窄屏展开菜单无溢出", async ({
+test("兴趣有独立导航与页面，跨页导航和窄屏菜单正常", async ({
   page,
 }, testInfo) => {
   await page.goto("/blog");
   const nav = page.getByRole("navigation", { name: "主导航" });
-  for (const [name, hash] of [
-    ["收藏", "collections"],
-    ["项目", "projects"],
-  ]) {
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "记录代码，也收藏日常。",
+  );
+  await expect(page.locator("#collections")).toHaveCount(0);
+  for (const [name, url] of [
+    ["兴趣", /\/interests$/],
+    ["项目", /\/blog#projects$/],
+  ] as const) {
     if (testInfo.project.name === "mobile")
       await page.getByRole("button", { name: "打开导航菜单" }).click();
     await nav.getByRole("link", { name: new RegExp(name) }).click();
-    await expect(page).toHaveURL(new RegExp(`#${hash}$`));
+    await expect(page).toHaveURL(url);
+    if (name === "兴趣") {
+      await expect(
+        page.getByRole("link", { name: /^兴趣/, includeHidden: true }),
+      ).toHaveAttribute("aria-current", "page");
+      await expect(
+        page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
+      ).toHaveCount(151);
+      await expect(page.locator("#articles, #projects, #about")).toHaveCount(0);
+      await page.reload();
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+        "我的兴趣。",
+      );
+      await expect(
+        page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
+      ).toHaveCount(151);
+      await page.screenshot({ path: testInfo.outputPath("interests.png") });
+    } else {
+      await expect(
+        page.getByRole("heading", { name: "把想法，做成作品。" }),
+      ).toBeInViewport();
+    }
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -112,4 +144,36 @@ test("导航可以到达收藏和项目，窄屏展开菜单无溢出", async ({
       ),
     ).toBe(true);
   }
+});
+
+test("旧收藏链接跳转到兴趣页，直接访问与返回文章正常", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/blog#collections");
+  await expect(page).toHaveURL(/\/interests$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "我的兴趣。",
+  );
+  await page.goto("/interests/");
+  await expect(
+    page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
+  ).toHaveCount(151);
+  if (testInfo.project.name === "mobile")
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
+  await page
+    .getByRole("navigation", { name: "主导航" })
+    .getByRole("link", { name: /文章/ })
+    .click();
+  await expect(page).toHaveURL(/\/blog#articles$/);
+  await expect(
+    page.getByRole("heading", { name: "最近，写了这些。" }),
+  ).toBeInViewport();
+  await expect(page.locator("#collections")).toHaveCount(0);
+  await page.evaluate(() => {
+    window.location.hash = "collections";
+  });
+  await expect(page).toHaveURL(/\/interests$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "我的兴趣。",
+  );
 });

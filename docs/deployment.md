@@ -1,6 +1,6 @@
 # 部署
 
-推送 main 自动 Docker 部署、从 `env.local` 同步 GitHub 配置并绑定 kidrue.top，见 [Docker 自动部署](docker-deployment.md)。下文是直接运行 Node 的手动部署方案。
+推送 main 自动构建并发布 GitHub Pages 静态站点，见 [GitHub Pages 部署](github-pages.md)。原 [Docker 部署](docker-deployment.md) 保留为手动触发，不再随 main 推送执行。下文是直接运行 Node 的手动部署方案。
 
 前端输出静态文件，Node API 独立运行。通过同一 HTTPS 域名代理 `/api/` 与 `/uploads/`，浏览器使用同源 Cookie。以下以 Linux、Node.js 22、Nginx、PostgreSQL 16 为例。
 

@@ -18,6 +18,7 @@ try {
       "入口页",
       "博客首页",
       "阅读弹窗",
+      "兴趣页",
       "手办收藏详情",
       "项目详情",
       "搜索无结果",
@@ -28,8 +29,13 @@ try {
       }
       if (state === "阅读弹窗")
         await page
-          .getByRole("button", { name: "阅读：把个人博客，写成自己的样子" })
+          .getByRole("button", { name: /^阅读：/ })
+          .first()
           .click();
+      if (state === "兴趣页") {
+        await page.goto(new URL("/interests", url).href);
+        await page.getByRole("heading", { level: 1 }).waitFor();
+      }
       if (state === "手办收藏详情") {
         await page
           .getByRole("button", { name: "收藏的手办", exact: true })
@@ -37,6 +43,7 @@ try {
         await page.locator("#collections summary").first().click();
       }
       if (state === "项目详情") {
+        await page.goto(new URL("/blog#projects", url).href);
         await page.locator("#projects summary").first().click();
       }
       if (state === "搜索无结果") {

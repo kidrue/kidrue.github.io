@@ -1,8 +1,6 @@
 name: 部署博客到阿里云
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

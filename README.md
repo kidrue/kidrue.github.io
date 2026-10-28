@@ -6,6 +6,8 @@
 
 ## 本地启动
 
+线上静态部署采用 GitHub Pages：每次推送 `main` 自动构建发布，配置及域名说明见 [GitHub Pages 自动发布](docs/github-pages.md)。本地可用 `npm run build:pages` 生成相同静态产物。
+
 需要 Node.js 22.14 或更新的 Node.js 22 版本，以及 npm。
 
 ```sh
@@ -15,6 +17,7 @@ npm run dev
 
 - 入口：<http://127.0.0.1:5174/>
 - 博客：<http://127.0.0.1:5174/blog>
+- 兴趣：<http://127.0.0.1:5174/interests>，独立展示动漫与手办，原 `/blog#collections` 链接会跳转至此。
 - 写作工作台：<http://127.0.0.1:5174/editor>
 - API 健康检查：<http://127.0.0.1:3001/api/health>
 
@@ -61,6 +64,12 @@ docs/deployment.md     生产部署说明
 
 ## 写作与上传
 
+### 本地日记
+
+导航「日记」对应 `/diary`，从项目根目录的 `日记/` 读取 Markdown，按年月展示时间轴。直接新建 `日记/2026-10-28-今天的记录.md`，正文第一行可写 `# 今天的记录`。也可复制 [日记模板](日记/_模板.md) 后改名，详细格式见 [日记目录说明](日记/README.md)。开发时保存自动更新；线上需重新构建并发布前端。`_` 开头的文件或目录和 README 不参与展示。
+
+`npm run test:diary` 串行验证本地文件新增、修改、删除与阅读，临时文件会自动清理。
+
 工作台支持文章列表与搜索、标题、摘要、分类、标签、封面、Markdown 工具栏、实时预览、草稿、发布、撤回和删除。手机上可切换编辑与预览。
 
 未保存的文字保存在当前浏览器，刷新并登录后恢复；状态会区分「本机备份」与「已保存到服务器」。切换文章和关闭页面时提示未保存内容。服务器通过 `revision` 检查多窗口修改，冲突时返回 409 并保留当前文字。
@@ -92,7 +101,21 @@ Node 向官方 `https://api.imgur.com/3/upload` 转发文件，凭据不会打�
 
 正文格式工具栏下方提供带文字的「上传图片」「上传视频」按钮，并显示允许的格式、大小限制与保存位置。封面可通过「上传封面」单独上传。上传失败或取消时保留已写内容，同一个文件可重新选择重试。
 
-公开列表读取已发布文章，保留并明确标注六篇内置示例。草稿只有登录后可见。Markdown 不执行原始 HTML，并过滤危险链接协议。
+公开列表合并已发布文章与 `apps/web/src/content/posts/` 中的本地 Markdown，按原始创建时间倒序展示。已收录博客园的 17 篇公开内容，替换原来的六篇示例；草稿只有登录后可见。Markdown 不执行原始 HTML，并过滤危险链接协议。
+
+## 博客园文章归档
+
+来自 <https://www.cnblogs.com/Kidrue> 的 16 篇随笔和 1 篇文章已保存为独立 `.md` 文件，正文图片存放于 `apps/web/public/images/posts/cnblogs/`。不启动 API 也能阅读这些文章；API 不可用时会显示提示。
+
+每篇文件包含 YAML front matter，保留标题、作者、原始发布日期、带 `+08:00` 时区的创建/更新时间、原文链接、原站分类和标签。页面阅读弹窗显示发布时间、更新时间与原文入口。日期取自原站正文的发布时间，不使用导入日期；原站未提供的更新时间不补写。
+
+导入明细和图片来源见 [导入清单](docs/cnblogs-import.json)，转换说明见 [归档说明](docs/cnblogs-import.md)。以后可直接编辑这些 `.md` 文件。运行 `node scripts/import-cnblogs.mjs` 可重新抓取公开内容，但会覆盖同名归档文件，重新抓取前请保存本地修改。
+
+## CSDN 文章归档
+
+来自 <https://blog.csdn.net/weixin_43295106> 的公开目录共 45 篇，现已全部收录为 Markdown，保留原始发布时间、更新时间、专栏、标签、原创/转载类型和来源链接，22 张正文图片保存到 `apps/web/public/images/posts/csdn/`。与 17 篇博客园文章合并后共 62 篇，同名文章保留各自版本。
+
+《wsl2配置转发规则，便于局域网内访问》已用作者提供的完整正文补齐，并标记为 `contentOrigin: author-provided`，重新导入时保留该版本。完整清单与处理方式见 [CSDN 归档说明](docs/csdn-import.md)和[导入清单](docs/csdn-import.json)。
 
 ## 数据库与部署
 
@@ -115,7 +138,8 @@ npm run capture
 
 ## 修改内容和样式
 
-- `apps/web/src/data/`：内置文章、番剧、手办和项目数据。替换实际记录后，将 `example` 改为 `false`。番剧分类为全部、看过、在看、想看、搁置、抛弃；海报卡片显示 `image`、`year`、`rating`，点击可展开观看笔记。桌面四列、平板三列、手机两列。海报与评分来源见 `apps/web/public/images/anime/README.md`。
+- `apps/web/src/content/posts/`：博客文章的 Markdown 正文和元数据，由 `apps/web/src/data/posts.ts` 自动读取。
+- `apps/web/src/data/`：内置文章、番剧、手办和项目数据。`watched-anime.ts` 收录博主提供的 151 条真实观看记录，重复项合并，原始名称和数字备注保留；整理说明见 [观看清单](docs/watched-anime.md)。番剧分类为全部、看过、在看、想看、搁置、抛弃；海报卡片显示 `image`、`year`、`rating`，点击可展开观看笔记。151 条记录均使用本地真实海报；未补充的年份和评分显示待补状态。桌面四列、平板三列、手机两列。海报与评分来源见 `apps/web/public/images/anime/README.md`。其他标为 `example: true` 的条目仍是示例。
 - `apps/web/src/editor/`：写作工作台及其 styled 组件。
 - `apps/web/src/styles/`：ThemeProvider 主题、基础全局样式、组件作用域样式和 keyframes。原有 CSS 已迁移为 CSS-in-JS。
 - `apps/web/src/components/LandingHero.tsx`：入口信息。

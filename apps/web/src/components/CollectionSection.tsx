@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   ArrowDownRight,
   Clapperboard,
@@ -13,11 +13,15 @@ import {
 import CollectionArtwork from "./CollectionArtwork";
 import AnimeCard from "./AnimeCard";
 import { AnimeFilters, AnimeGrid, CollectionTabs } from "./AnimeShelf.styles";
+import { Timeline } from "./Timeline.styles";
+import ViewSwitcher, { type ListView } from "./ViewSwitcher";
 
 const animeStatuses = ["全部", "看过", "在看", "想看", "搁置", "抛弃"] as const;
 
 export default function CollectionSection() {
   const [kind, setKind] = useState<CollectionKind>("anime");
+  const [view, setView] = useState<ListView>("timeline");
+  const AnimeList = view === "timeline" ? Timeline : AnimeGrid;
   const [animeStatus, setAnimeStatus] = useState<"全部" | AnimeStatus>("全部");
   const kindRecords = collectionRecords.filter(
     (record) => record.kind === kind,
@@ -29,6 +33,19 @@ export default function CollectionSection() {
       record.status === animeStatus,
   );
   const exampleCount = records.filter((record) => record.example).length;
+  const animeGroups = new Map<
+    string,
+    Extract<(typeof records)[number], { kind: "anime" }>[]
+  >();
+  const sortedAnime = records
+    .filter((record) => record.kind === "anime")
+    .sort((a, b) => (b.airDate ?? "").localeCompare(a.airDate ?? ""));
+  for (const record of sortedAnime) {
+    const month = record.airDate?.slice(0, 7) ?? "播出时间待确认";
+    const group = animeGroups.get(month) ?? [];
+    group.push(record);
+    animeGroups.set(month, group);
+  }
 
   return (
     <section
@@ -82,7 +99,7 @@ export default function CollectionSection() {
       <div className="collection-intro">
         <p>
           {kind === "anime"
-            ? "看过的故事、还未开始的期待，还有想留待以后继续的旅程。"
+            ? "按首播年月从新到旧排列，收藏每一段喜欢的故事。"
             : "把喜欢变成触手可及的小风景，每一格收藏柜都有自己的故事。"}
         </p>
         <span className="collection-count" role="status" aria-live="polite">
@@ -114,6 +131,9 @@ export default function CollectionSection() {
           ))}
         </AnimeFilters>
       )}
+      {kind === "anime" && (
+        <ViewSwitcher value={view} onChange={setView} label="番剧展示方式" />
+      )}
       {records.length === 0 ? (
         <div className="collection-empty">
           <Clapperboard size={28} strokeWidth={1.5} aria-hidden="true" />
@@ -128,14 +148,26 @@ export default function CollectionSection() {
           )}
         </div>
       ) : kind === "anime" ? (
-        <AnimeGrid aria-label="番剧记录">
-          {records.map(
-            (record) =>
-              record.kind === "anime" && (
-                <AnimeCard key={record.id} record={record} />
-              ),
-          )}
-        </AnimeGrid>
+        <AnimeList as="ul" aria-label="番剧记录">
+          {[...animeGroups].map(([month, entries]) => (
+            <Fragment key={month}>
+              <li
+                role="presentation"
+                className="anime-month-heading timeline-month"
+              >
+                <h3>{month}</h3>
+                <span>{entries.length} 部</span>
+              </li>
+              {entries.map((record) => (
+                <AnimeCard
+                  key={`${view}-${record.id}`}
+                  record={record}
+                  view={view}
+                />
+              ))}
+            </Fragment>
+          ))}
+        </AnimeList>
       ) : (
         <ul className="collection-grid" aria-label="手办收藏">
           {records.map((record) => (
@@ -179,7 +211,15 @@ export default function CollectionSection() {
           {kind === "anime" && (
             <>
               {" "}
-              封面与评分来自{" "}
+              海报来自{" "}
+              <a
+                href="https://bgm.tv/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Bangumi
+              </a>{" "}
+              与{" "}
               <a
                 href="https://anilist.co/"
                 target="_blank"
@@ -187,7 +227,8 @@ export default function CollectionSection() {
               >
                 AniList
               </a>
-              。
+              ，标注的评分为 AniList
+              历史评分。按首播或首次公映日期归类，合并多季的记录按第一季，具体作品未明确的系列暂不归入月份。
             </>
           )}
         </span>

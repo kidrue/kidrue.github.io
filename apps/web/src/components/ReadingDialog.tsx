@@ -3,12 +3,25 @@ import { ArrowUpRight, Clock3, X } from "lucide-react";
 import type { Post } from "../data/posts";
 import MarkdownContent from "./MarkdownContent";
 
+const formatTimestamp = (value: string) =>
+  new Intl.DateTimeFormat("sv-SE", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date(value));
+
 export default function ReadingDialog({
   post,
   onClose,
+  kind = "article",
 }: {
   post: Post | null;
   onClose: () => void;
+  kind?: "article" | "diary";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -56,7 +69,7 @@ export default function ReadingDialog({
             </span>
             <button
               type="button"
-              aria-label="关闭文章"
+              aria-label={kind === "diary" ? "关闭日记" : "关闭文章"}
               onClick={onClose}
               autoFocus
             >
@@ -65,17 +78,51 @@ export default function ReadingDialog({
           </div>
           <div className="reading-body">
             <div className="reading-eyebrow">
-              {post.category}手记{" "}
-              <span>{post.example !== false ? "示例文章" : "原创文章"}</span>
+              {kind === "diary" ? "日记" : `${post.category}手记`}{" "}
+              <span>
+                {kind === "diary"
+                  ? "日常记录"
+                  : post.example !== false
+                    ? "示例文章"
+                    : post.sourceType === "转载"
+                      ? "转载文章"
+                      : "原创文章"}
+              </span>
             </div>
             <h2 id="reading-title">{post.title}</h2>
             <div className="reading-meta">
-              <time dateTime={post.date}>{post.date.replaceAll("-", ".")}</time>
+              <time dateTime={post.createdAt ?? post.date}>
+                {post.createdAt
+                  ? `发布于 ${formatTimestamp(post.createdAt)}`
+                  : post.date.replaceAll("-", ".")}
+              </time>
+              {post.updatedAt && post.updatedAt !== post.createdAt && (
+                <time dateTime={post.updatedAt}>
+                  更新于 {formatTimestamp(post.updatedAt)}
+                </time>
+              )}
+              {post.author && (
+                <span>
+                  {post.sourceType === "转载" ? "转载者" : "作者"}：
+                  {post.author}
+                </span>
+              )}
               <span>
                 <Clock3 size={14} />
                 {post.readTime} 分钟阅读
               </span>
             </div>
+            {post.sourceUrl && (
+              <p className="reading-source">
+                <a
+                  href={post.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.source ?? "来源"}原文
+                </a>
+              </p>
+            )}
             <p className="reading-intro">{post.description}</p>
             {post.coverUrl && (
               <img

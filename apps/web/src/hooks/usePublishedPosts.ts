@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import type { Article } from "@kidrue/shared";
-import { posts as examples, type Post } from "../data/posts";
+import { posts as localPosts, type Post } from "../data/posts";
 
 export default function usePublishedPosts() {
-  const [posts, setPosts] = useState<Post[]>(examples);
+  const [posts, setPosts] = useState<Post[]>(localPosts);
   const [error, setError] = useState("");
   useEffect(() => {
+    if (import.meta.env.VITE_STATIC_SITE === "true") return;
     const controller = new AbortController();
     fetch("/api/articles", { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok)
-          throw new Error("文章服务暂不可用，当前展示内置示例文章。");
+          throw new Error("文章服务暂不可用，仍可阅读本站收录的本地文章。");
         const data = await response.json();
         if (!Array.isArray(data.articles))
-          throw new Error("文章服务返回无效结果，当前展示内置示例文章。");
+          throw new Error("文章服务返回无效结果，仍可阅读本站收录的本地文章。");
         const published: Post[] = data.articles
           .filter(
             (article: Article) =>
@@ -27,6 +28,7 @@ export default function usePublishedPosts() {
             title: article.title,
             description: article.description,
             date: article.date,
+            createdAt: article.createdAt,
             readTime: article.readTime,
             category: article.category,
             tags: article.tags,
@@ -36,7 +38,13 @@ export default function usePublishedPosts() {
             sections: [],
             example: false,
           }));
-        setPosts([...published, ...examples]);
+        setPosts(
+          [...published, ...localPosts].sort(
+            (a, b) =>
+              Date.parse(b.createdAt ?? b.date) -
+              Date.parse(a.createdAt ?? a.date),
+          ),
+        );
       })
       .catch((failure) => {
         if (!controller.signal.aborted)

@@ -56,12 +56,18 @@ try {
     if (blog.scrollWidth > blog.width || blog.cards < 6)
       throw new Error(`博客布局检查失败：${JSON.stringify(blog)}`);
     console.log(JSON.stringify(blog));
-    for (const id of ["articles", "collections", "projects"]) {
+    for (const id of ["articles", "projects"]) {
       await page.locator(`#${id}`).screenshot({
         path: `artifacts/${id}-${width}.png`,
         style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
       });
     }
+    await page.goto(new URL("/interests", url).href);
+    await page.getByRole("heading", { level: 1, name: "我的兴趣。" }).waitFor();
+    await page.locator("#collections").scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: `artifacts/collections-${width}.png`,
+    });
     await page.getByRole("button", { name: "收藏的手办", exact: true }).click();
     await page.locator("#collections").screenshot({
       path: `artifacts/figures-${width}.png`,

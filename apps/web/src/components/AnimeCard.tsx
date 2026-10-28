@@ -1,7 +1,8 @@
-import { Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import styled from "styled-components";
 import type { CollectionRecord } from "../data/collections";
 import CollectionArtwork from "./CollectionArtwork";
+import type { ListView } from "./ViewSwitcher";
 
 type AnimeRecord = Extract<CollectionRecord, { kind: "anime" }>;
 const noteLabels = {
@@ -46,7 +47,7 @@ const Card = styled.li`
     font-weight: 700;
     line-height: 1.3;
   }
-  h3 {
+  h4 {
     margin: 12px 0 5px;
     font-size: 15px;
     line-height: 1.6;
@@ -106,7 +107,7 @@ const Card = styled.li`
     overflow-wrap: anywhere;
   }
   @media (max-width: 640px) {
-    h3 {
+    h4 {
       margin-top: 9px;
       font-size: 13px;
     }
@@ -122,14 +123,62 @@ const Card = styled.li`
   }
 `;
 
-export default function AnimeCard({ record }: { record: AnimeRecord }) {
+export default function AnimeCard({
+  record,
+  view = "cards",
+}: {
+  record: AnimeRecord;
+  view?: ListView;
+}) {
+  if (view === "timeline") {
+    return (
+      <li className="timeline-item" data-air-date={record.airDate}>
+        <details>
+          <summary
+            className="timeline-row"
+            aria-label={`${noteLabels[record.status]}：${record.title}`}
+          >
+            {record.airDate ? (
+              <time dateTime={record.airDate}>{record.airDate}</time>
+            ) : (
+              <span className="timeline-date-unknown">时间待确认</span>
+            )}
+            <ArrowRight
+              className="timeline-arrow"
+              size={16}
+              aria-hidden="true"
+            />
+            <div className="timeline-anime-title">
+              <CollectionArtwork record={record} />
+              <h4>{record.title}</h4>
+            </div>
+            <span className="timeline-label">{record.status}</span>
+          </summary>
+          <div className="timeline-detail">
+            <div>
+              <p>
+                {record.rating === undefined
+                  ? "暂无评分"
+                  : `AniList 评分 ${record.rating.toFixed(1)} 分`}
+              </p>
+              <p>{record.note}</p>
+            </div>
+          </div>
+        </details>
+      </li>
+    );
+  }
   return (
-    <Card>
+    <Card data-air-date={record.airDate}>
       <CollectionArtwork record={record} />
       <span className="anime-badge">{record.status}</span>
-      <h3>{record.title}</h3>
+      <h4>{record.title}</h4>
       <div className="anime-meta">
-        <span>{record.year ?? "年份待补"}</span>
+        {record.airDate ? (
+          <time dateTime={record.airDate}>{record.airDate.slice(0, 7)}</time>
+        ) : (
+          <span>播出时间待确认</span>
+        )}
         <span aria-hidden="true">·</span>
         {record.rating !== undefined ? (
           <span
