@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Post } from "../data/posts";
 import { Timeline } from "./Timeline.styles";
+import { preloadReading } from "../lib/reading";
 
 export default function ArticleTimeline({
   posts,
@@ -42,6 +43,8 @@ export default function ArticleTimeline({
                     type="button"
                     aria-label={`阅读：${post.title}`}
                     onClick={() => onRead(post)}
+                    onMouseEnter={preloadReading}
+                    onFocus={preloadReading}
                   >
                     {post.title}
                   </button>

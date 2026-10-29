@@ -1,74 +1,122 @@
+import { lazy, Suspense, useEffect, type ComponentType } from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigation,
+} from "react-router";
+import { RouterProvider } from "react-router/dom";
 import LandingHero from "./components/LandingHero";
+import SiteLayout from "./components/SiteLayout";
 import { SiteSurface } from "./styles/SiteSurface";
-import { lazy, Suspense, useEffect } from "react";
-
-const EditorPage = lazy(() => import("./editor/EditorPage"));
-const BlogPage = lazy(() => import("./BlogPage"));
-const InterestsPage = lazy(() => import("./InterestsPage"));
-const DiaryPage = lazy(() => import("./DiaryPage"));
-const ProjectsPage = lazy(() => import("./ProjectsPage"));
+import {
+  loadPage,
+  pageFromPath,
+  prefetchLightPages,
+  type PublicPage,
+} from "./navigation/pages";
+import { NavigationSession } from "./navigation/Session";
+import RouteLoadError from "./navigation/RouteLoadError";
 
 const legacySectionRoutes: Record<string, string> = {
   "#collections": "/interests",
   "#projects": "/projects",
 };
 
-function LegacySectionRedirect({ to }: { to: string }) {
-  useEffect(() => {
-    window.location.replace(to);
-  }, [to]);
-  return <main style={{ padding: 40 }}>正在打开页面…</main>;
+function PublicLayout() {
+  const location = useLocation();
+  const navigation = useNavigation();
+  const page = pageFromPath(location.pathname) ?? "blog";
+  const legacy =
+    page === "blog" ? legacySectionRoutes[location.hash] : undefined;
+  useEffect(() => prefetchLightPages(), [page]);
+  return (
+    <SiteLayout page={page} loading={navigation.state !== "idle"}>
+      {legacy ? <Navigate to={legacy} replace /> : <Outlet />}
+    </SiteLayout>
+  );
 }
 
-export default function App() {
-  const path = window.location.pathname.replace(/\/+$/, "");
-  const legacyRoute =
-    path === "/blog" ? legacySectionRoutes[window.location.hash] : undefined;
-  useEffect(() => {
-    if (path !== "/blog") return;
-    const onHashChange = () => {
-      const destination = legacySectionRoutes[window.location.hash];
-      if (destination) window.location.replace(destination);
-    };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, [path]);
+function EntryPage() {
+  return (
+    <main className="entry-page" tabIndex={-1}>
+      <LandingHero />
+    </main>
+  );
+}
 
+// 兼容旧锚点时原地替换 URL，不额外请求 HTML。
+const initialUrl = new URL(window.location.href);
+if (
+  initialUrl.pathname.replace(/\/+$/, "") === "/blog" &&
+  legacySectionRoutes[initialUrl.hash]
+) {
+  window.history.replaceState(
+    window.history.state,
+    "",
+    legacySectionRoutes[initialUrl.hash],
+  );
+}
+
+function pageRoute(
+  path: string,
+  load: () => Promise<{ default: ComponentType }>,
+) {
+  const Page = lazy(load);
+  return {
+    path,
+    loader: async () => {
+      await load();
+      return null;
+    },
+    Component: () => (
+      <Suspense
+        fallback={
+          <div className="route-loading" role="status">
+            正在打开页面…
+          </div>
+        }
+      >
+        <Page />
+      </Suspense>
+    ),
+    ErrorBoundary: RouteLoadError,
+    shouldRevalidate: () => false,
+  };
+}
+
+const router = createBrowserRouter([
+  {
+    Component: NavigationSession,
+    HydrateFallback: () => (
+      <main className="route-loading" aria-busy="true">
+        正在打开页面…
+      </main>
+    ),
+    ErrorBoundary: RouteLoadError,
+    children: [
+      { index: true, Component: EntryPage },
+      {
+        Component: PublicLayout,
+        children: (
+          ["blog", "diary", "interests", "projects"] as PublicPage[]
+        ).map((page) => pageRoute(page, () => loadPage(page))),
+      },
+      ...(import.meta.env.VITE_STATIC_SITE !== "true"
+        ? [pageRoute("editor", () => import("./editor/EditorPage"))]
+        : []),
+      { path: "*", Component: EntryPage },
+    ],
+  },
+]);
+
+if (import.meta.hot) import.meta.hot.dispose(() => router.dispose());
+
+export default function App() {
   return (
     <SiteSurface>
-      {path === "/editor" && import.meta.env.VITE_STATIC_SITE !== "true" ? (
-        <Suspense
-          fallback={<main style={{ padding: 40 }}>正在打开写作工作台…</main>}
-        >
-          <EditorPage />
-        </Suspense>
-      ) : path === "/diary" ? (
-        <Suspense fallback={<main style={{ padding: 40 }}>正在打开日记…</main>}>
-          <DiaryPage />
-        </Suspense>
-      ) : path === "/interests" ? (
-        <Suspense
-          fallback={<main style={{ padding: 40 }}>正在打开兴趣页…</main>}
-        >
-          <InterestsPage />
-        </Suspense>
-      ) : path === "/projects" ? (
-        <Suspense
-          fallback={<main style={{ padding: 40 }}>正在打开项目页…</main>}
-        >
-          <ProjectsPage />
-        </Suspense>
-      ) : legacyRoute ? (
-        <LegacySectionRedirect to={legacyRoute} />
-      ) : path === "/blog" ? (
-        <Suspense fallback={<main style={{ padding: 40 }}>正在打开博客…</main>}>
-          <BlogPage />
-        </Suspense>
-      ) : (
-        <main className="entry-page">
-          <LandingHero />
-        </main>
-      )}
+      <RouterProvider router={router} />
     </SiteSurface>
   );
 }

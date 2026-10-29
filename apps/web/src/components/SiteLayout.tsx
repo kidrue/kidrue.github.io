@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowUp, Menu, X } from "lucide-react";
+import { useLocation } from "react-router";
+import AppLink from "../navigation/AppLink";
 
 const navigation = [
   { id: "home", label: "首页", href: "/" },
@@ -16,7 +18,7 @@ const navigation = [
 
 function Brand() {
   return (
-    <a className="brand" href="/" aria-label="kidrue 首页">
+    <AppLink className="brand" to="/" aria-label="kidrue 首页">
       <span className="brand-symbol" aria-hidden="true">
         <i />
         <i />
@@ -24,17 +26,20 @@ function Brand() {
         <i />
       </span>
       kidrue<span className="brand-dot">.</span>
-    </a>
+    </AppLink>
   );
 }
 
 export default function SiteLayout({
   page,
   children,
+  loading = false,
 }: {
   page: "blog" | "interests" | "diary" | "projects";
   children: ReactNode;
+  loading?: boolean;
 }) {
+  const location = useLocation();
   const topId = page === "blog" ? "articles" : page;
   const contentLabel = {
     blog: "文章",
@@ -47,23 +52,7 @@ export default function SiteLayout({
   const [activeSection, setActiveSection] = useState<string>(topId);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
-  useEffect(() => {
-    // lazy 页面、样式和字体就绪后定位，避免刷新时沿用布局未稳定前的位置。
-    const hash = window.location.hash;
-    if (!hash) return;
-    let cancelled = false;
-    const frame = requestAnimationFrame(async () => {
-      await document.fonts.ready;
-      if (cancelled || window.location.hash !== hash) return;
-      document
-        .getElementById(hash.slice(1))
-        ?.scrollIntoView({ behavior: "instant", block: "start" });
-    });
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(frame);
-    };
-  }, []);
+  useEffect(() => setMenuOpen(false), [location.key]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -84,7 +73,7 @@ export default function SiteLayout({
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, [page]);
+  }, [page, location.key]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -100,9 +89,9 @@ export default function SiteLayout({
 
   return (
     <>
-      <a className="skip-link" href={`#${topId}`}>
+      <AppLink className="skip-link" to={`#${topId}`}>
         跳转到{contentLabel}内容
-      </a>
+      </AppLink>
       <header className="site-header">
         <div className="container header-inner">
           <Brand />
@@ -124,14 +113,15 @@ export default function SiteLayout({
               aria-label="主导航"
             >
               {navigation.map((item, index) => (
-                <a
+                <AppLink
                   key={item.id}
-                  href={
+                  to={
                     page === "blog" && item.href.startsWith("/blog#")
                       ? `#${item.id}`
                       : item.href
                   }
                   onClick={() => setMenuOpen(false)}
+                  reloadDocument={item.id === "editor"}
                   className={activeSection === item.id ? "active" : ""}
                   aria-current={
                     activeSection === item.id
@@ -143,7 +133,7 @@ export default function SiteLayout({
                 >
                   {item.label}
                   <span className="nav-number">0{index + 1}</span>
-                </a>
+                </AppLink>
               ))}
             </nav>
             <span className="header-note">
@@ -152,9 +142,18 @@ export default function SiteLayout({
             </span>
           </div>
         </div>
+        {loading && (
+          <progress className="navigation-progress" aria-label="正在切换栏目" />
+        )}
       </header>
 
-      <main id={page !== "blog" ? page : undefined}>{children}</main>
+      <main
+        id={page !== "blog" ? page : undefined}
+        tabIndex={-1}
+        aria-busy={loading}
+      >
+        {children}
+      </main>
 
       <footer className="container site-footer">
         <div>
@@ -169,9 +168,9 @@ export default function SiteLayout({
         </div>
       </footer>
       {showBackToTop && (
-        <a className="back-to-top" href={`#${topId}`} aria-label="回到顶部">
+        <AppLink className="back-to-top" to={`#${topId}`} aria-label="回到顶部">
           <ArrowUp size={19} />
-        </a>
+        </AppLink>
       )}
     </>
   );

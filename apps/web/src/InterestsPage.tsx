@@ -1,9 +1,8 @@
 import CollectionSection from "./components/CollectionSection";
-import SiteLayout from "./components/SiteLayout";
 
 export default function InterestsPage() {
   return (
-    <SiteLayout page="interests">
+    <>
       <div className="container blog-intro">
         <div className="eyebrow">KIDRUE / INTERESTS</div>
         <h1>
@@ -11,6 +10,6 @@ export default function InterestsPage() {
         </h1>
       </div>
       <CollectionSection />
-    </SiteLayout>
+    </>
   );
 }

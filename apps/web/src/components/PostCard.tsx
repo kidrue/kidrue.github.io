@@ -1,6 +1,7 @@
 import { ArrowUpRight, Clock3, Code2, Feather, Pin } from "lucide-react";
 import type { Post } from "../data/posts";
 import PostArtwork from "./PostArtwork";
+import { preloadReading } from "../lib/reading";
 
 export default function PostCard({
   post,
@@ -58,6 +59,8 @@ export default function PostCard({
             className="post-title-button"
             aria-label={`阅读：${post.title}`}
             onClick={() => onRead(post)}
+            onMouseEnter={preloadReading}
+            onFocus={preloadReading}
           >
             {post.title}
           </button>

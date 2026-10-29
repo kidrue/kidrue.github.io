@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ArrowUpRight, Clock3, X } from "lucide-react";
 import type { Post } from "../data/posts";
-import MarkdownContent from "./MarkdownContent";
+import ReadingContent from "./ReadingContent";
 
 const formatTimestamp = (value: string) =>
   new Intl.DateTimeFormat("sv-SE", {
@@ -137,7 +137,7 @@ export default function ReadingDialog({
                 }}
               />
             )}
-            {post.body !== undefined && <MarkdownContent body={post.body} />}
+            {post.body !== undefined && <ReadingContent body={post.body} />}
             {post.sections.map((section) => (
               <section key={section.title}>
                 <h3>{section.title}</h3>

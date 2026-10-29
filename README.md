@@ -155,3 +155,5 @@ npm run capture
 - `apps/web/public/fonts/`：寒蝉全圆体与 SIL OFL 1.1 许可证。
 
 每日名言来自[一言接口](https://developer.hitokoto.cn/sentence/)，按浏览器本地日期缓存，跨日更新，失败时显示标注的寄语与重试入口。
+
+顶部导航使用 React Router 站内切换，支持页面预加载及同次访问内恢复搜索、筛选、视图和滚动位置；刷新后重置。加载策略与验证说明见 [导航性能优化](docs/navigation-performance.md)。

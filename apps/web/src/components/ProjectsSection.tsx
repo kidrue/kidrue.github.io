@@ -7,6 +7,7 @@ import {
   PanelsTopLeft,
 } from "lucide-react";
 import { projects } from "../data/projects";
+import AppLink from "../navigation/AppLink";
 
 const projectIcons = { blog: PanelsTopLeft, ideas: Lightbulb, tasks: Blocks };
 
@@ -72,10 +73,10 @@ export default function ProjectsSection() {
                   <p>{project.note}</p>
                 </details>
                 {project.link && (
-                  <a href={project.link.href}>
+                  <AppLink to={project.link.href}>
                     {project.link.label}
                     <ArrowUpRight size={15} />
-                  </a>
+                  </AppLink>
                 )}
               </div>
             </li>

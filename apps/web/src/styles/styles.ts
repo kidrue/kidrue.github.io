@@ -38,6 +38,28 @@ export const layoutStyles = css`
     align-items: center;
     justify-content: space-between;
   }
+  .navigation-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    border: 0;
+    accent-color: var(--accent);
+  }
+  main:focus {
+    outline: none;
+  }
+  .route-loading {
+    min-height: 240px;
+    padding-block: 40px;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+  .route-loading a {
+    color: var(--accent);
+    text-decoration: underline;
+  }
   .brand {
     display: inline-flex;
     align-items: center;

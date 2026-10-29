@@ -2,17 +2,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { Send } from "lucide-react";
 import { entryPlaneLaunch } from "../styles/entry-button";
+import { useNavigate } from "react-router";
+import AppLink from "../navigation/AppLink";
+import { loadPage } from "../navigation/pages";
 
 const destination = "/blog#articles";
 
 export default function EnterBlogLink() {
+  const navigateTo = useNavigate();
   const [launching, setLaunching] = useState(false);
   const navigated = useRef(false);
   const navigate = useCallback(() => {
     if (navigated.current) return;
     navigated.current = true;
-    window.location.assign(destination);
-  }, []);
+    void navigateTo(destination);
+  }, [navigateTo]);
 
   useEffect(() => {
     if (!launching) return;
@@ -43,13 +47,14 @@ export default function EnterBlogLink() {
     )
       return;
     event.preventDefault();
+    void loadPage("blog").catch(() => {});
     setLaunching(true);
   };
 
   return (
-    <a
+    <AppLink
       className={`entry-primary${launching ? " is-launching" : ""}`}
-      href={destination}
+      to={destination}
       aria-label="进入博客"
       aria-busy={launching}
       onClick={onClick}
@@ -86,6 +91,6 @@ export default function EnterBlogLink() {
         <span className="entry-fold entry-body-right" />
         <span className="entry-fold entry-wing-right" />
       </span>
-    </a>
+    </AppLink>
   );
 }

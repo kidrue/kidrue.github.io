@@ -34,7 +34,8 @@
     "deploy:smoke": "node scripts/deploy/smoke.mjs",
     "test:deploy": "node --test scripts/deploy.test.mjs",
     "check:a11y": "node scripts/check-accessibility.mjs",
-    "capture": "node scripts/capture-preview.mjs"
+    "capture": "node scripts/capture-preview.mjs",
+    "measure:navigation": "node scripts/measure-navigation.mjs"
   },
   "devDependencies": {
     "@alicloud/alidns20150109": "^4.6.1",

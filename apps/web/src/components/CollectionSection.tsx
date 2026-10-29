@@ -1,4 +1,5 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
+import { useTabState } from "../navigation/Session";
 import {
   ArrowDownRight,
   Clapperboard,
@@ -20,10 +21,16 @@ import bilibiliSnapshot from "../data/bilibili-bangumi.json";
 const animeStatuses = ["全部", "看过", "在看", "想看", "搁置", "抛弃"] as const;
 
 export default function CollectionSection() {
-  const [kind, setKind] = useState<CollectionKind>("anime");
-  const [view, setView] = useState<ListView>("timeline");
+  const [kind, setKind] = useTabState<CollectionKind>(
+    "interests:kind",
+    "anime",
+  );
+  const [view, setView] = useTabState<ListView>("interests:view", "timeline");
   const AnimeList = view === "timeline" ? Timeline : AnimeGrid;
-  const [animeStatus, setAnimeStatus] = useState<"全部" | AnimeStatus>("全部");
+  const [animeStatus, setAnimeStatus] = useTabState<"全部" | AnimeStatus>(
+    "interests:status",
+    "全部",
+  );
   const kindRecords = collectionRecords.filter(
     (record) => record.kind === kind,
   );

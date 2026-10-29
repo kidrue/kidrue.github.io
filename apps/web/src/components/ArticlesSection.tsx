@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useTabState } from "../navigation/Session";
 import {
   ChevronDown,
   Feather,
@@ -39,10 +40,13 @@ export default function ArticlesSection({
 }) {
   const { posts, error } = usePublishedPosts();
   const allTags = [...new Set(posts.flatMap((post) => post.tags))];
-  const [category, setCategory] = useState<"全部" | Category>("全部");
-  const [query, setQuery] = useState("");
-  const [tag, setTag] = useState("");
-  const [view, setView] = useState<ListView>("timeline");
+  const [category, setCategory] = useTabState<"全部" | Category>(
+    "articles:category",
+    "全部",
+  );
+  const [query, setQuery] = useTabState("articles:query", "");
+  const [tag, setTag] = useTabState("articles:tag", "");
+  const [view, setView] = useTabState<ListView>("articles:view", "timeline");
   const searchRef = useRef<HTMLInputElement>(null);
   const normalizedQuery = query.trim().toLowerCase();
   const hasFilters =
