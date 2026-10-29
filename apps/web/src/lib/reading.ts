@@ -1,3 +1,5 @@
+import { allowsPrefetch } from "../navigation/pages";
+
 let pending:
   Promise<typeof import("../components/MarkdownContent")> | undefined;
 
@@ -10,5 +12,6 @@ export function loadMarkdownContent() {
 }
 
 export function preloadReading() {
+  if (!allowsPrefetch()) return;
   void loadMarkdownContent().catch(() => {});
 }

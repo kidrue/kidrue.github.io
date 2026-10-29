@@ -78,6 +78,27 @@ export function NavigationSession() {
           ? tabPositions.current.get(targetKey(location))
           : undefined;
     let cancelled = false;
+    const removeInteractionListeners = () => {
+      window.removeEventListener("wheel", cancelForInteraction);
+      window.removeEventListener("touchstart", cancelForInteraction);
+      window.removeEventListener("pointerdown", cancelForInteraction);
+      window.removeEventListener("keydown", cancelForInteraction);
+    };
+    const cancelForInteraction = () => {
+      cancelled = true;
+      restoring.current = false;
+      removeInteractionListeners();
+      captureScroll();
+    };
+    // 字体慢时用户可能已开始阅读；之后的补偿定位不能覆盖用户操作。
+    window.addEventListener("wheel", cancelForInteraction, { passive: true });
+    window.addEventListener("touchstart", cancelForInteraction, {
+      passive: true,
+    });
+    window.addEventListener("pointerdown", cancelForInteraction, {
+      passive: true,
+    });
+    window.addEventListener("keydown", cancelForInteraction);
     const frame = requestAnimationFrame(async () => {
       await document.fonts.ready;
       if (cancelled) return;
@@ -87,16 +108,23 @@ export function NavigationSession() {
       else if (target)
         target.scrollIntoView({ behavior: "instant", block: "start" });
       else window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      if (!first && !samePage)
-        document
-          .querySelector<HTMLElement>("main")
-          ?.focus({ preventScroll: true });
+      let focusTarget: HTMLElement | null = null;
+      if (target && !point) focusTarget = target;
+      else if (!first && !samePage)
+        focusTarget = document.querySelector<HTMLElement>("main");
+      if (focusTarget) {
+        if (!focusTarget.hasAttribute("tabindex"))
+          focusTarget.setAttribute("tabindex", "-1");
+        focusTarget.focus({ preventScroll: true });
+      }
       restoring.current = false;
+      removeInteractionListeners();
       captureScroll();
     });
     return () => {
       cancelled = true;
       cancelAnimationFrame(frame);
+      removeInteractionListeners();
     };
   }, [location, action, captureScroll]);
 

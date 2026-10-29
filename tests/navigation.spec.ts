@@ -251,3 +251,70 @@ test("包含无效转义的锚点不会使页面报错", async ({ page }) => {
   });
   expect(errors).toEqual([]);
 });
+
+test("慢字体到达后不会把用户已经滚动的位置重置", async ({ page }) => {
+  let release: (() => void) | undefined;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/fonts/*.woff2", async (route) => {
+    await gate;
+    await route.continue();
+  });
+  try {
+    await page.goto("/blog", { waitUntil: "domcontentloaded" });
+    await expect(page.locator("#articles")).toBeVisible();
+    await page.mouse.wheel(0, 1200);
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(800);
+    release!();
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
+    });
+    expect(await page.evaluate(() => scrollY)).toBeGreaterThan(800);
+  } finally {
+    release!();
+  }
+});
+
+test("跳过导航将键盘焦点交给内容，下一次 Tab 不再回到导航", async ({
+  page,
+}) => {
+  await page.goto("/blog");
+  await expect(page.locator("#articles")).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator(".skip-link").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#articles")).toBeFocused();
+  await page.keyboard.press("Tab");
+  expect(
+    await page.evaluate(() =>
+      document.querySelector("#articles")?.contains(document.activeElement),
+    ),
+  ).toBe(true);
+});
+
+test("省流量时不因标题聚焦预取正文，主动阅读仍能加载", async ({ page }) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "connection", {
+      value: { saveData: true, effectiveType: "4g" },
+      configurable: true,
+    }),
+  );
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/src/components/MarkdownContent.tsx"))
+      requests.push(request.url());
+  });
+  await page.goto("/blog");
+  const title = page.getByRole("button", {
+    name: "阅读：typescript循环依赖error",
+  });
+  await title.focus();
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  expect(requests).toEqual([]);
+  await title.click();
+  await expect(page.locator("dialog .markdown-content")).toBeVisible();
+  expect(requests).toHaveLength(1);
+});

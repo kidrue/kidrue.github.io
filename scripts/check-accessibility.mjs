@@ -27,11 +27,13 @@ try {
         await page.goto(new URL("/blog", url).href);
         await page.getByRole("heading", { level: 1 }).waitFor();
       }
-      if (state === "阅读弹窗")
+      if (state === "阅读弹窗") {
         await page
           .getByRole("button", { name: /^阅读：/ })
           .first()
           .click();
+        await page.locator("dialog .markdown-content").waitFor();
+      }
       if (state === "兴趣页") {
         await page.goto(new URL("/interests", url).href);
         await page.getByRole("heading", { level: 1 }).waitFor();
@@ -47,6 +49,7 @@ try {
         await page.locator("#project-list summary").first().click();
       }
       if (state === "搜索无结果") {
+        await page.goto(new URL("/blog", url).href);
         await page
           .getByRole("searchbox", { name: "搜索文章" })
           .fill("没有匹配的文章关键词");
