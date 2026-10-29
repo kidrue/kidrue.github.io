@@ -38,6 +38,7 @@ test("顶部导航复用文档与公共导航，跨栏目切换没有 HTML 请�
     ["兴趣", "我的兴趣。"],
     ["项目", "我的项目。"],
     ["日记", "日常，慢慢记。"],
+    ["一句话", "喜欢的一句话。"],
     ["文章", "记录代码，也收藏日常。"],
   ]) {
     await openTab(page, name);
@@ -93,7 +94,7 @@ test("跨栏目返回保留文章搜索视图、兴趣筛选及滚动位置", as
   await expect(page.locator("#articles article")).toHaveCount(1);
 });
 
-test("前进后退恢复位置，博客内锚点跳转不被旧位置覆盖", async ({ page }) => {
+test("前进后退恢复位置，独立栏目和博客锚点均能跳转", async ({ page }) => {
   await page.goto("/interests");
   await expect(page.locator("#collections")).toBeVisible();
   await page.evaluate(() =>
@@ -107,7 +108,12 @@ test("前进后退恢复位置，博客内锚点跳转不被旧位置覆盖", as
   await page.goForward();
   await expect(page).toHaveURL(/\/projects$/);
   await openTab(page, "一句话");
+  await expect(page).toHaveURL(/\/quotes$/);
   await expect(page.locator("#quotes-title")).toBeInViewport();
+  await openTab(page, "文章");
+  await expect(page.locator("#articles-title")).toBeInViewport();
+  await openTab(page, "关于");
+  await expect(page.locator("#about h2")).toBeInViewport();
   await openTab(page, "文章");
   await expect(page.locator("#articles-title")).toBeInViewport();
 });

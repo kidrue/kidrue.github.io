@@ -5,6 +5,7 @@ export const pageLoaders = {
   interests: () => import("../InterestsPage"),
   diary: () => import("../DiaryPage"),
   projects: () => import("../ProjectsPage"),
+  quotes: () => import("../QuotesPage"),
 };
 export type PublicPage = keyof typeof pageLoaders;
 const pendingPages = new Map<PublicPage, Promise<{ default: ComponentType }>>();
@@ -52,6 +53,7 @@ export function prefetchLightPages() {
   const prefetch = () => {
     prefetchPage("/diary");
     prefetchPage("/projects");
+    prefetchPage("/quotes");
   };
   if ("requestIdleCallback" in window) {
     const id = window.requestIdleCallback(prefetch, { timeout: 1500 });

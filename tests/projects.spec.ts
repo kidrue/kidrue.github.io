@@ -4,7 +4,8 @@ test("项目从导航进入独立页面，直接访问和刷新保持项目内�
   page,
 }, testInfo) => {
   await page.goto("/blog");
-  await expect(page.locator("#articles, #quotes")).toHaveCount(2);
+  await expect(page.locator("#articles")).toBeVisible();
+  await expect(page.locator("#quotes, #quote-list")).toHaveCount(0);
   await expect(page.locator("#project-list, #projects")).toHaveCount(0);
   if (testInfo.project.name === "mobile")
     await page.getByRole("button", { name: "打开导航菜单" }).click();

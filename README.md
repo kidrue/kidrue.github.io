@@ -19,6 +19,7 @@ npm run dev
 - 博客：<http://127.0.0.1:5174/blog>
 - 兴趣：<http://127.0.0.1:5174/interests>，独立展示动漫与手办，原 `/blog#collections` 链接会跳转至此。
 - 项目：<http://127.0.0.1:5174/projects>，独立展示项目卡片与开发记录，原 `/blog#projects` 链接会跳转至此。
+- 一句话：<http://127.0.0.1:5174/quotes>，独立展示喜欢的句子，原 `/blog#quotes` 链接会跳转至此。
 - 写作工作台：<http://127.0.0.1:5174/editor>
 - API 健康检查：<http://127.0.0.1:3001/api/health>
 
@@ -139,7 +140,7 @@ npm run capture
 
 ## 修改内容和样式
 
-- “一句话”入口位于导航栏，指向 `/blog#quotes`；在 `apps/web/src/data/favorite-quotes.ts` 追加带唯一 `id` 和 `text` 的对象即可继续收藏，原文按数组顺序展示。
+- “一句话”入口位于导航栏，指向独立页面 `/quotes`；在 `apps/web/src/data/favorite-quotes.ts` 追加带唯一 `id` 和 `text` 的对象即可继续收藏，原文按数组顺序展示。
 - 首页显示博客运行时间，以 `apps/web/src/data/site.ts` 中固定的 `siteStartedAt` 为基准（2026-10-28 15:13:37，北京时间首次 GitHub Pages 部署完成），每秒更新。重新构建、刷新和换设备不会重置；显示值取决于访客设备时间。
 - 兴趣页已合并 Bilibili 公开追番列表，共 339 条记录。运行 `npm run import:bilibili` 更新本地快照和封面，再提交至 `main` 自动发布；来源、去重和维护说明见 [Bilibili 导入说明](docs/bilibili-import.md)。
 

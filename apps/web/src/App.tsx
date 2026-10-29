@@ -22,6 +22,7 @@ import RouteLoadError from "./navigation/RouteLoadError";
 const legacySectionRoutes: Record<string, string> = {
   "#collections": "/interests",
   "#projects": "/projects",
+  "#quotes": "/quotes",
 };
 
 function PublicLayout() {
@@ -100,7 +101,7 @@ const router = createBrowserRouter([
       {
         Component: PublicLayout,
         children: (
-          ["blog", "diary", "interests", "projects"] as PublicPage[]
+          ["blog", "diary", "interests", "projects", "quotes"] as PublicPage[]
         ).map((page) => pageRoute(page, () => loadPage(page))),
       },
       ...(import.meta.env.VITE_STATIC_SITE !== "true"

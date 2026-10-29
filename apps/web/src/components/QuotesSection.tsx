@@ -55,7 +55,11 @@ const Section = styled.section`
 
 export default function QuotesSection() {
   return (
-    <Section id="quotes" className="container" aria-labelledby="quotes-title">
+    <Section
+      id="quote-list"
+      className="container"
+      aria-labelledby="quotes-title"
+    >
       <div className="section-heading">
         <div>
           <div className="eyebrow section-eyebrow">

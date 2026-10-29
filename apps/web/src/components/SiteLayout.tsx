@@ -8,7 +8,7 @@ const navigation = [
   { id: "articles", label: "文章", href: "/blog#articles" },
   { id: "diary", label: "日记", href: "/diary" },
   { id: "interests", label: "兴趣", href: "/interests" },
-  { id: "quotes", label: "一句话", href: "/blog#quotes" },
+  { id: "quotes", label: "一句话", href: "/quotes" },
   { id: "projects", label: "项目", href: "/projects" },
   { id: "about", label: "关于", href: "/blog#about" },
   { id: "editor", label: "写作", href: "/editor" },
@@ -35,7 +35,7 @@ export default function SiteLayout({
   children,
   loading = false,
 }: {
-  page: "blog" | "interests" | "diary" | "projects";
+  page: "blog" | "interests" | "diary" | "projects" | "quotes";
   children: ReactNode;
   loading?: boolean;
 }) {
@@ -46,6 +46,7 @@ export default function SiteLayout({
     interests: "兴趣",
     diary: "日记",
     projects: "项目",
+    quotes: "一句话",
   }[page];
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);

@@ -21,6 +21,7 @@ try {
       "兴趣页",
       "手办收藏详情",
       "项目详情",
+      "一句话页",
       "搜索无结果",
     ]) {
       if (state === "博客首页") {
@@ -53,6 +54,10 @@ try {
         await page
           .getByRole("searchbox", { name: "搜索文章" })
           .fill("没有匹配的文章关键词");
+      }
+      if (state === "一句话页") {
+        await page.goto(new URL("/quotes", url).href);
+        await page.getByRole("heading", { level: 1 }).waitFor();
       }
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21aa"])

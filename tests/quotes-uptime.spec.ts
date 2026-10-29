@@ -1,21 +1,34 @@
 import { expect, test } from "./fixtures";
 
 test("一句话导航收藏原文，跨页与窄屏均可阅读", async ({ page }, testInfo) => {
-  await page.goto("/interests");
+  await page.goto("/blog");
+  await expect(page.locator("#articles")).toBeVisible();
+  await expect(page.locator("#quotes, #quote-list")).toHaveCount(0);
   if (testInfo.project.name === "mobile")
     await page.getByRole("button", { name: "打开导航菜单" }).click();
   await page
     .getByRole("navigation", { name: "主导航" })
     .getByRole("link", { name: /一句话/ })
     .click();
-  await expect(page).toHaveURL(/\/blog#quotes$/);
+  await expect(page).toHaveURL(/\/quotes$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "喜欢的一句话。",
+  );
+  await expect(
+    page.getByRole("link", { name: /^一句话/, includeHidden: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(
+    page.locator("#articles, #project-list, #collections, #about"),
+  ).toHaveCount(0);
   const section = page.getByRole("region", { name: "把喜欢的话，留在这里。" });
   await expect(section.getByRole("heading")).toBeInViewport();
   await expect(section.locator("blockquote")).toHaveText([
     "至亲的离去不是一场暴雨，而是此生漫长的潮湿，我困在这潮湿当中，是清晨空荡的厨房，是晚归漆黑的窗，在每一个波澜不惊的日子里，掀起狂风骤雨",
     "白头并非雪可替，牵手还需人名币",
   ]);
+  await page.goto("/quotes/");
   await page.reload();
+  await expect(page.locator("#quotes")).toHaveCount(1);
   await expect(section.getByRole("heading")).toBeInViewport();
   await expect
     .poll(async () => {
@@ -30,6 +43,24 @@ test("一句话导航收藏原文，跨页与窄屏均可阅读", async ({ page 
     ),
   ).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("favorite-quotes.png") });
+});
+
+test("旧一句话锚点兼容独立页面，博客内变更旧锚点也能跳转", async ({ page }) => {
+  await page.goto("/blog#quotes");
+  await expect(page).toHaveURL(/\/quotes$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "喜欢的一句话。",
+  );
+  await expect(page.locator("#articles")).toHaveCount(0);
+  await page.goto("/blog");
+  await expect(page.locator("#articles")).toBeVisible();
+  await page.evaluate(() => {
+    window.location.hash = "quotes";
+  });
+  await expect(page).toHaveURL(/\/quotes$/);
+  await expect(
+    page.getByRole("region", { name: "把喜欢的话，留在这里。" }),
+  ).toBeVisible();
 });
 
 test("入口按首次上线时间计时，每秒更新且刷新不会重置", async ({

@@ -4,7 +4,6 @@ import avatar from "../avatar.jpg";
 import type { Post } from "./data/posts";
 import ArticlesSection from "./components/ArticlesSection";
 import ReadingDialog from "./components/ReadingDialog";
-import QuotesSection from "./components/QuotesSection";
 
 export default function BlogPage() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -17,7 +16,6 @@ export default function BlogPage() {
         </h1>
       </div>
       <ArticlesSection onRead={setSelectedPost} />
-      <QuotesSection />
 
       <section id="about" className="about-section container">
         <div className="about-card">

@@ -58,12 +58,18 @@ try {
     if (blog.scrollWidth > blog.width || blog.cards < 6)
       throw new Error(`博客布局检查失败：${JSON.stringify(blog)}`);
     console.log(JSON.stringify(blog));
-    for (const id of ["articles", "quotes"]) {
-      await page.locator(`#${id}`).screenshot({
-        path: `artifacts/${id}-${width}.png`,
-        style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
-      });
-    }
+    await page.locator("#articles").screenshot({
+      path: `artifacts/articles-${width}.png`,
+      style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
+    });
+    await page.goto(new URL("/quotes", url).href);
+    await page
+      .getByRole("heading", { level: 1, name: "喜欢的一句话。" })
+      .waitFor();
+    await page.locator("#quote-list").screenshot({
+      path: `artifacts/quotes-${width}.png`,
+      style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
+    });
     await page.goto(new URL("/projects", url).href);
     await page.getByRole("heading", { level: 1, name: "我的项目。" }).waitFor();
     await page.locator("#project-list").screenshot({
