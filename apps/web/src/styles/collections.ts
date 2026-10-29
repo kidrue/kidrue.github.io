@@ -1,6 +1,19 @@
 import { css } from "styled-components";
 
 export const collectionStyles = css`
+  .bilibili-import-note {
+    margin: -8px 0 22px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+  }
+  .bilibili-import-note a,
+  .anime-sources a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
   .collection-section,
   .projects-section {
     padding-top: 30px;
@@ -378,13 +391,6 @@ export const collectionStyles = css`
     }
   }
   @media (max-width: 900px) {
-    .main-nav {
-      gap: 5px;
-    }
-    .main-nav a {
-      min-width: 65px;
-      gap: 6px;
-    }
     .collection-grid,
     .projects-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -411,14 +417,6 @@ export const collectionStyles = css`
       min-width: 0;
       padding-inline: 11px;
       gap: 5px;
-    }
-    .main-nav.is-open {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .main-nav a {
-      min-width: 0;
     }
     .collection-section,
     .projects-section {

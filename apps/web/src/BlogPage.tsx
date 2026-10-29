@@ -6,6 +6,7 @@ import ArticlesSection from "./components/ArticlesSection";
 import ReadingDialog from "./components/ReadingDialog";
 import ProjectsSection from "./components/ProjectsSection";
 import SiteLayout from "./components/SiteLayout";
+import QuotesSection from "./components/QuotesSection";
 
 export default function BlogPage() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -19,6 +20,7 @@ export default function BlogPage() {
           </h1>
         </div>
         <ArticlesSection onRead={setSelectedPost} />
+        <QuotesSection />
         <ProjectsSection />
 
         <section id="about" className="about-section container">

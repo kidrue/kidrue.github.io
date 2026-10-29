@@ -74,13 +74,13 @@ export const layoutStyles = css`
   }
   .main-nav {
     display: flex;
-    gap: 14px;
+    gap: 8px;
   }
   .main-nav a {
     position: relative;
     isolation: isolate;
     min-height: 44px;
-    min-width: 82px;
+    min-width: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1102,16 +1102,17 @@ export const layoutStyles = css`
       padding-bottom: 17px;
     }
   }
+  @media (max-width: 1200px) {
+    .header-note {
+      display: none;
+    }
+  }
   @media (max-width: 1100px) {
     .container {
       width: calc(100% - 64px);
     }
     .header-right {
       gap: 22px;
-    }
-    .header-note {
-      padding-left: 18px;
-      letter-spacing: 0;
     }
     .hero-inner {
       gap: 12px;
@@ -1194,7 +1195,15 @@ export const layoutStyles = css`
     }
   }
   @media (max-width: 900px) {
-    .header-note {
+    .main-nav {
+      gap: 4px;
+    }
+    .main-nav a {
+      min-width: 44px;
+      gap: 4px;
+      font-size: 12px;
+    }
+    .nav-number {
       display: none;
     }
     .hero-inner {
@@ -1353,10 +1362,13 @@ export const layoutStyles = css`
       gap: 10px;
     }
     .main-nav.is-open {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
     }
     .main-nav a {
       flex: 1;
+      min-width: 0;
       min-height: 48px;
     }
     .main-nav a:before {

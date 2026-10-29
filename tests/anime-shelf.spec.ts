@@ -1,13 +1,13 @@
-import { expect, test } from "./fixtures";
+import { expect, test, localAnimeCount } from "./fixtures";
 
-test("151 条观看记录的本地海报均可加载，保留看过状态与已有评分", async ({
+test("全部观看记录的本地海报均可加载，保留看过状态与已有评分", async ({
   page,
 }, testInfo) => {
   await page.goto("/interests");
   await page.getByRole("button", { name: "卡片", exact: true }).click();
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
   const list = section.getByRole("list", { name: "番剧记录" });
-  await expect(list.getByRole("listitem")).toHaveCount(151);
+  await expect(list.getByRole("listitem")).toHaveCount(localAnimeCount);
   const first = list.getByRole("listitem").filter({
     has: page.getByRole("heading", {
       name: "刀剑神域（第 1、2 季）",
@@ -22,7 +22,7 @@ test("151 条观看记录的本地海报均可加载，保留看过状态与已�
     first.getByRole("img", { name: "刀剑神域（第 1、2 季）封面" }),
   ).toBeVisible();
   const images = list.getByRole("img");
-  await expect(images).toHaveCount(151);
+  await expect(images).toHaveCount(localAnimeCount);
   const failedCovers = await images.evaluateAll(async (elements) =>
     (
       await Promise.all(
@@ -81,10 +81,10 @@ test("六种番剧筛选计数正确，空状态可以回到全部", async ({ pa
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
   const filters = section.getByRole("group", { name: "番剧状态" });
   for (const [status, count] of [
-    ["全部", 151],
-    ["看过", 151],
-    ["在看", 0],
-    ["想看", 0],
+    ["全部", localAnimeCount],
+    ["看过", 195],
+    ["在看", 143],
+    ["想看", 1],
     ["搁置", 0],
     ["抛弃", 0],
   ] as const) {
@@ -96,5 +96,5 @@ test("六种番剧筛选计数正确，空状态可以回到全部", async ({ pa
   }
   await expect(section.getByText("这个分类还没有番剧记录")).toBeVisible();
   await section.getByRole("button", { name: "查看全部番剧" }).click();
-  await expect(section.getByRole("listitem")).toHaveCount(151);
+  await expect(section.getByRole("listitem")).toHaveCount(localAnimeCount);
 });

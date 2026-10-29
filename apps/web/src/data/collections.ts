@@ -1,4 +1,7 @@
 import { watchedAnimeRecords } from "./watched-anime";
+import bilibiliSnapshot from "./bilibili-bangumi.json";
+import bilibiliMatches from "./bilibili-matches.json";
+import { mergeAnime } from "./mergeAnime";
 
 export type CollectionKind = "anime" | "figure";
 export type AnimeStatus = "看过" | "在看" | "想看" | "搁置" | "抛弃";
@@ -20,13 +23,19 @@ export type CollectionRecord = CollectionRecordBase &
         year?: number;
         rating?: number;
         airDate?: string;
+        bilibili?: {
+          seasonId: number;
+          title: string;
+          url: string;
+          status: string;
+        }[];
       }
     | { kind: "figure"; status: string }
   );
 
-// 番剧来自博主的实际观看清单；手办仍为明确标注的布局示例。
+// 保留手动观看记录，仅按核对后的映射合并同一作品。
 export const collectionRecords: CollectionRecord[] = [
-  ...watchedAnimeRecords,
+  ...mergeAnime(watchedAnimeRecords, bilibiliSnapshot.records, bilibiliMatches),
   {
     id: "figure-traveler",
     example: true,

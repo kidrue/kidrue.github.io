@@ -3,6 +3,9 @@ import cnblogsImport from "../docs/cnblogs-import.json" with { type: "json" };
 import csdnImport from "../docs/csdn-import.json" with { type: "json" };
 import duplicateGroups from "../apps/web/src/data/post-duplicates.json" with { type: "json" };
 
+// 151 条原清单 + 196 条 Bilibili - 6 条同作品 - 2 条地区/配音版本。
+export const localAnimeCount = 339;
+
 export const localPostCount =
   cnblogsImport.importedCount +
   csdnImport.importedCount -

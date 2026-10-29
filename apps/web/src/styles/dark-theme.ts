@@ -411,6 +411,23 @@ export const darkStyles = css`
     font-size: 9px;
     color: #c0cfe3;
   }
+  .site-uptime {
+    grid-column: 2;
+    margin: 22px 0 0;
+    color: #c3d1e5;
+    font-size: 11px;
+    line-height: 1.8;
+    font-variant-numeric: tabular-nums;
+  }
+  .uptime-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: #b1dcc9;
+    vertical-align: middle;
+  }
   .entry-art-credit:hover {
     color: #fff;
   }

@@ -1,4 +1,4 @@
-import { expect, test, localPostCount } from "./fixtures";
+import { expect, test, localPostCount, localAnimeCount } from "./fixtures";
 
 test("文章默认展示时间到标题的时间轴，切换视图保留搜索并能阅读", async ({
   page,
@@ -49,10 +49,10 @@ test("追番默认为年月时间轴，展开详情并保留卡片入口", async
   await expect(
     section.getByRole("button", { name: "时间轴", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
-  await expect(section.locator(".timeline-item")).toHaveCount(151);
+  await expect(section.locator(".timeline-item")).toHaveCount(localAnimeCount);
   const first = section.getByRole("listitem").first();
-  await expect(first.getByRole("heading")).toHaveText("小林家的龙女仆");
-  await expect(first.locator("time")).toHaveText("2017-01-11");
+  await expect(first.getByRole("heading")).toHaveText("百日成王");
+  await expect(first.locator("time")).toHaveText("2026-07-03");
   await expect(first.getByRole("img")).toBeVisible();
   await expect(first.locator(".timeline-detail")).not.toBeVisible();
   await first.locator("summary").focus();
@@ -66,10 +66,10 @@ test("追番默认为年月时间轴，展开详情并保留卡片入口", async
   await section.getByRole("button", { name: "时间轴", exact: true }).click();
   await expect(first.getByRole("img")).toBeVisible();
   await expect(first.locator(".timeline-detail")).not.toBeVisible();
-  await section.getByRole("button", { name: "想看", exact: true }).click();
+  await section.getByRole("button", { name: "搁置", exact: true }).click();
   await expect(section.getByRole("listitem")).toHaveCount(0);
   await section.getByRole("button", { name: "查看全部番剧" }).click();
-  await expect(section.locator(".timeline-item")).toHaveCount(151);
+  await expect(section.locator(".timeline-item")).toHaveCount(localAnimeCount);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

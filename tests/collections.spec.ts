@@ -1,9 +1,9 @@
-import { expect, test } from "./fixtures";
+import { expect, test, localAnimeCount } from "./fixtures";
 
 test("兴趣收藏可以切换动漫和手办，并显示对应记录", async ({ page }) => {
   await page.goto("/interests");
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
-  await expect(section.getByRole("listitem")).toHaveCount(151);
+  await expect(section.getByRole("listitem")).toHaveCount(localAnimeCount);
   await expect(
     section.getByRole("heading", { name: "刀剑神域（第 1、2 季）" }),
   ).toBeVisible();
@@ -29,14 +29,12 @@ test("兴趣收藏可以切换动漫和手办，并显示对应记录", async ({
 test("动漫和手办记录可展开详情，切换分类后恢复收起", async ({ page }) => {
   await page.goto("/interests");
   const section = page.getByRole("region", { name: "兴趣，认真收藏。" });
-  const firstRecord = section
-    .getByRole("listitem")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "刀剑神域（第 1、2 季）",
-        exact: true,
-      }),
-    });
+  const firstRecord = section.getByRole("listitem").filter({
+    has: page.getByRole("heading", {
+      name: "刀剑神域（第 1、2 季）",
+      exact: true,
+    }),
+  });
   await firstRecord
     .getByLabel("查看观后感：刀剑神域（第 1、2 季）", { exact: true })
     .click();
@@ -110,7 +108,7 @@ test("兴趣有独立导航与页面，跨页导航和窄屏菜单正常", async
       ).toHaveAttribute("aria-current", "page");
       await expect(
         page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
-      ).toHaveCount(151);
+      ).toHaveCount(localAnimeCount);
       await expect(page.locator("#articles, #projects, #about")).toHaveCount(0);
       await page.reload();
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -118,7 +116,7 @@ test("兴趣有独立导航与页面，跨页导航和窄屏菜单正常", async
       );
       await expect(
         page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
-      ).toHaveCount(151);
+      ).toHaveCount(localAnimeCount);
       await page.screenshot({ path: testInfo.outputPath("interests.png") });
     } else {
       await expect(
@@ -157,7 +155,7 @@ test("旧收藏链接跳转到兴趣页，直接访问与返回文章正常", as
   await page.goto("/interests/");
   await expect(
     page.getByRole("list", { name: "番剧记录" }).getByRole("listitem"),
-  ).toHaveCount(151);
+  ).toHaveCount(localAnimeCount);
   if (testInfo.project.name === "mobile")
     await page.getByRole("button", { name: "打开导航菜单" }).click();
   await page

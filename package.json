@@ -20,6 +20,7 @@
     "start": "npm run start -w @kidrue/api",
     "test": "npm run test:tooling && npm run test:api && npm run test:web",
     "test:tooling": "node --test scripts/*.test.mjs",
+    "import:bilibili": "node scripts/import-bilibili.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test:web": "playwright test",
     "test:diary": "playwright test --config playwright.diary.config.ts",

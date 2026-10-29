@@ -15,6 +15,7 @@ import AnimeCard from "./AnimeCard";
 import { AnimeFilters, AnimeGrid, CollectionTabs } from "./AnimeShelf.styles";
 import { Timeline } from "./Timeline.styles";
 import ViewSwitcher, { type ListView } from "./ViewSwitcher";
+import bilibiliSnapshot from "../data/bilibili-bangumi.json";
 
 const animeStatuses = ["全部", "看过", "在看", "想看", "搁置", "抛弃"] as const;
 
@@ -108,6 +109,22 @@ export default function CollectionSection() {
           {exampleCount > 0 && ` · ${exampleCount} 项示例`}
         </span>
       </div>
+      {kind === "anime" && (
+        <p className="bilibili-import-note">
+          <a
+            href={bilibiliSnapshot.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            我的 Bilibili 追番列表
+          </a>
+          <span>
+            {" "}
+            · {bilibiliSnapshot.total} 条收藏 · 更新于{" "}
+            {bilibiliSnapshot.fetchedAt.slice(0, 10)}
+          </span>
+        </p>
+      )}
       {kind === "anime" && (
         <AnimeFilters role="group" aria-label="番剧状态">
           {animeStatuses.map((status) => (
@@ -219,7 +236,7 @@ export default function CollectionSection() {
               >
                 Bangumi
               </a>{" "}
-              与{" "}
+              、{" "}
               <a
                 href="https://anilist.co/"
                 target="_blank"
@@ -227,8 +244,10 @@ export default function CollectionSection() {
               >
                 AniList
               </a>
-              ，标注的评分为 AniList
-              历史评分。按首播或首次公映日期归类，合并多季的记录按第一季，具体作品未明确的系列暂不归入月份。
+              与 Bilibili，标注的评分为 AniList 历史评分。
+              按首播或首次公映日期归类；Bilibili
+              新记录采用平台提供的上映日期，可能与其他地区不同。
+              合并多季的记录按第一季，具体作品未明确或尚未开播的记录暂不归入月份。
             </>
           )}
         </span>

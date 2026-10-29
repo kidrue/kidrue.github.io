@@ -3,6 +3,7 @@ import avatar from "../../avatar.jpg";
 import useDailyQuote from "../hooks/useDailyQuote";
 import EnterBlogLink from "./EnterBlogLink";
 import MeteorShower from "./MeteorShower";
+import SiteUptime from "./SiteUptime";
 
 const socialLinks = [
   {
@@ -124,6 +125,7 @@ export default function LandingHero() {
           <div className="entry-actions">
             <EnterBlogLink />
           </div>
+          <SiteUptime />
         </div>
       </div>
       <a

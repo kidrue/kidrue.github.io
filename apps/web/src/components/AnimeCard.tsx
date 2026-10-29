@@ -106,6 +106,9 @@ const Card = styled.li`
     border-radius: 0 5px 5px 0;
     overflow-wrap: anywhere;
   }
+  .anime-sources p {
+    margin: 8px 0 0;
+  }
   @media (max-width: 640px) {
     h4 {
       margin-top: 9px;
@@ -122,6 +125,22 @@ const Card = styled.li`
     }
   }
 `;
+
+function BilibiliSources({ record }: { record: AnimeRecord }) {
+  if (!record.bilibili?.length) return null;
+  return (
+    <div className="anime-sources">
+      {record.bilibili.map((source) => (
+        <p key={source.seasonId}>
+          <a href={source.url} target="_blank" rel="noopener noreferrer">
+            Bilibili：{source.title}
+          </a>
+          <span> · {source.status}</span>
+        </p>
+      ))}
+    </div>
+  );
+}
 
 export default function AnimeCard({
   record,
@@ -162,6 +181,7 @@ export default function AnimeCard({
                   : `AniList 评分 ${record.rating.toFixed(1)} 分`}
               </p>
               <p>{record.note}</p>
+              <BilibiliSources record={record} />
             </div>
           </div>
         </details>
@@ -195,7 +215,10 @@ export default function AnimeCard({
       </div>
       <details>
         <summary aria-label={`${noteLabels[record.status]}：${record.title}`} />
-        <p className="anime-note">{record.note}</p>
+        <div className="anime-note">
+          <p>{record.note}</p>
+          <BilibiliSources record={record} />
+        </div>
       </details>
     </Card>
   );

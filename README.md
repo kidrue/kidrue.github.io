@@ -138,6 +138,10 @@ npm run capture
 
 ## 修改内容和样式
 
+- “一句话”入口位于导航栏，指向 `/blog#quotes`；在 `apps/web/src/data/favorite-quotes.ts` 追加带唯一 `id` 和 `text` 的对象即可继续收藏，原文按数组顺序展示。
+- 首页显示博客运行时间，以 `apps/web/src/data/site.ts` 中固定的 `siteStartedAt` 为基准（2026-10-28 15:13:37，北京时间首次 GitHub Pages 部署完成），每秒更新。重新构建、刷新和换设备不会重置；显示值取决于访客设备时间。
+- 兴趣页已合并 Bilibili 公开追番列表，共 339 条记录。运行 `npm run import:bilibili` 更新本地快照和封面，再提交至 `main` 自动发布；来源、去重和维护说明见 [Bilibili 导入说明](docs/bilibili-import.md)。
+
 - `apps/web/src/content/posts/`：博客文章的 Markdown 正文和元数据，由 `apps/web/src/data/posts.ts` 自动读取。
 - `apps/web/src/data/`：内置文章、番剧、手办和项目数据。`watched-anime.ts` 收录博主提供的 151 条真实观看记录，重复项合并，原始名称和数字备注保留；整理说明见 [观看清单](docs/watched-anime.md)。番剧分类为全部、看过、在看、想看、搁置、抛弃；海报卡片显示 `image`、`year`、`rating`，点击可展开观看笔记。151 条记录均使用本地真实海报；未补充的年份和评分显示待补状态。桌面四列、平板三列、手机两列。海报与评分来源见 `apps/web/public/images/anime/README.md`。其他标为 `example: true` 的条目仍是示例。
 - `apps/web/src/editor/`：写作工作台及其 styled 组件。

@@ -6,6 +6,7 @@ const navigation = [
   { id: "articles", label: "文章", href: "/blog#articles" },
   { id: "diary", label: "日记", href: "/diary" },
   { id: "interests", label: "兴趣", href: "/interests" },
+  { id: "quotes", label: "一句话", href: "/blog#quotes" },
   { id: "projects", label: "项目", href: "/blog#projects" },
   { id: "about", label: "关于", href: "/blog#about" },
   { id: "editor", label: "写作", href: "/editor" },
@@ -42,9 +43,21 @@ export default function SiteLayout({
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
-    // 跨页链接的原生锚点滚动可能早于 lazy 页面挂载，内容就绪后补做定位。
-    const target = document.getElementById(window.location.hash.slice(1));
-    target?.scrollIntoView();
+    // lazy 页面、样式和字体就绪后定位，避免刷新时沿用布局未稳定前的位置。
+    const hash = window.location.hash;
+    if (!hash) return;
+    let cancelled = false;
+    const frame = requestAnimationFrame(async () => {
+      await document.fonts.ready;
+      if (cancelled || window.location.hash !== hash) return;
+      document
+        .getElementById(hash.slice(1))
+        ?.scrollIntoView({ behavior: "instant", block: "start" });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
