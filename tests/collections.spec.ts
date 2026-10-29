@@ -67,7 +67,7 @@ test("动漫和手办记录可展开详情，切换分类后恢复收起", async
 test("开发项目区展示真实本站和明确标注的示例，项目说明可展开", async ({
   page,
 }) => {
-  await page.goto("/blog#projects");
+  await page.goto("/projects");
   const section = page.getByRole("region", { name: "把想法，做成作品。" });
   await expect(section.getByRole("listitem")).toHaveCount(3);
   await expect(
@@ -96,7 +96,7 @@ test("兴趣有独立导航与页面，跨页导航和窄屏菜单正常", async
   await expect(page.locator("#collections")).toHaveCount(0);
   for (const [name, url] of [
     ["兴趣", /\/interests$/],
-    ["项目", /\/blog#projects$/],
+    ["项目", /\/projects$/],
   ] as const) {
     if (testInfo.project.name === "mobile")
       await page.getByRole("button", { name: "打开导航菜单" }).click();

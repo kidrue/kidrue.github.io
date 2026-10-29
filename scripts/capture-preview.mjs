@@ -50,18 +50,26 @@ try {
       width: innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
       cards: document.querySelectorAll("article").length,
-      columns: getComputedStyle(document.querySelector(".posts-grid"))
-        .gridTemplateColumns,
+      columns: document.querySelector(".posts-grid")
+        ? getComputedStyle(document.querySelector(".posts-grid"))
+            .gridTemplateColumns
+        : "timeline",
     }));
     if (blog.scrollWidth > blog.width || blog.cards < 6)
       throw new Error(`博客布局检查失败：${JSON.stringify(blog)}`);
     console.log(JSON.stringify(blog));
-    for (const id of ["articles", "projects"]) {
+    for (const id of ["articles", "quotes"]) {
       await page.locator(`#${id}`).screenshot({
         path: `artifacts/${id}-${width}.png`,
         style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
       });
     }
+    await page.goto(new URL("/projects", url).href);
+    await page.getByRole("heading", { level: 1, name: "我的项目。" }).waitFor();
+    await page.locator("#project-list").screenshot({
+      path: `artifacts/projects-${width}.png`,
+      style: ".site-header, .skip-link, .back-to-top { visibility: hidden; }",
+    });
     await page.goto(new URL("/interests", url).href);
     await page.getByRole("heading", { level: 1, name: "我的兴趣。" }).waitFor();
     await page.locator("#collections").scrollIntoViewIfNeeded();

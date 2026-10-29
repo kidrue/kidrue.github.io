@@ -7,7 +7,7 @@ const navigation = [
   { id: "diary", label: "日记", href: "/diary" },
   { id: "interests", label: "兴趣", href: "/interests" },
   { id: "quotes", label: "一句话", href: "/blog#quotes" },
-  { id: "projects", label: "项目", href: "/blog#projects" },
+  { id: "projects", label: "项目", href: "/projects" },
   { id: "about", label: "关于", href: "/blog#about" },
   { id: "editor", label: "写作", href: "/editor" },
 ].filter(
@@ -32,11 +32,16 @@ export default function SiteLayout({
   page,
   children,
 }: {
-  page: "blog" | "interests" | "diary";
+  page: "blog" | "interests" | "diary" | "projects";
   children: ReactNode;
 }) {
   const topId = page === "blog" ? "articles" : page;
-  const contentLabel = { blog: "文章", interests: "兴趣", diary: "日记" }[page];
+  const contentLabel = {
+    blog: "文章",
+    interests: "兴趣",
+    diary: "日记",
+    projects: "项目",
+  }[page];
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [activeSection, setActiveSection] = useState<string>(topId);

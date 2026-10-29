@@ -18,6 +18,7 @@ npm run dev
 - 入口：<http://127.0.0.1:5174/>
 - 博客：<http://127.0.0.1:5174/blog>
 - 兴趣：<http://127.0.0.1:5174/interests>，独立展示动漫与手办，原 `/blog#collections` 链接会跳转至此。
+- 项目：<http://127.0.0.1:5174/projects>，独立展示项目卡片与开发记录，原 `/blog#projects` 链接会跳转至此。
 - 写作工作台：<http://127.0.0.1:5174/editor>
 - API 健康检查：<http://127.0.0.1:3001/api/health>
 

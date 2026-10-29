@@ -43,8 +43,8 @@ try {
         await page.locator("#collections summary").first().click();
       }
       if (state === "项目详情") {
-        await page.goto(new URL("/blog#projects", url).href);
-        await page.locator("#projects summary").first().click();
+        await page.goto(new URL("/projects", url).href);
+        await page.locator("#project-list summary").first().click();
       }
       if (state === "搜索无结果") {
         await page

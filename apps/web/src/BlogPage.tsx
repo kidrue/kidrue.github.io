@@ -4,7 +4,6 @@ import avatar from "../avatar.jpg";
 import type { Post } from "./data/posts";
 import ArticlesSection from "./components/ArticlesSection";
 import ReadingDialog from "./components/ReadingDialog";
-import ProjectsSection from "./components/ProjectsSection";
 import SiteLayout from "./components/SiteLayout";
 import QuotesSection from "./components/QuotesSection";
 
@@ -21,7 +20,6 @@ export default function BlogPage() {
         </div>
         <ArticlesSection onRead={setSelectedPost} />
         <QuotesSection />
-        <ProjectsSection />
 
         <section id="about" className="about-section container">
           <div className="about-card">

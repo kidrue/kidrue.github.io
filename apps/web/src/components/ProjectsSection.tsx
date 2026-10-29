@@ -13,7 +13,7 @@ const projectIcons = { blog: PanelsTopLeft, ideas: Lightbulb, tasks: Blocks };
 export default function ProjectsSection() {
   return (
     <section
-      id="projects"
+      id="project-list"
       className="projects-section container"
       aria-labelledby="projects-title"
     >

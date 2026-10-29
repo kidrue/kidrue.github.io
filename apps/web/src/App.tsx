@@ -6,22 +6,29 @@ const EditorPage = lazy(() => import("./editor/EditorPage"));
 const BlogPage = lazy(() => import("./BlogPage"));
 const InterestsPage = lazy(() => import("./InterestsPage"));
 const DiaryPage = lazy(() => import("./DiaryPage"));
+const ProjectsPage = lazy(() => import("./ProjectsPage"));
 
-function LegacyInterestsRedirect() {
+const legacySectionRoutes: Record<string, string> = {
+  "#collections": "/interests",
+  "#projects": "/projects",
+};
+
+function LegacySectionRedirect({ to }: { to: string }) {
   useEffect(() => {
-    window.location.replace("/interests");
-  }, []);
-  return <main style={{ padding: 40 }}>正在打开兴趣页…</main>;
+    window.location.replace(to);
+  }, [to]);
+  return <main style={{ padding: 40 }}>正在打开页面…</main>;
 }
 
 export default function App() {
   const path = window.location.pathname.replace(/\/+$/, "");
+  const legacyRoute =
+    path === "/blog" ? legacySectionRoutes[window.location.hash] : undefined;
   useEffect(() => {
     if (path !== "/blog") return;
     const onHashChange = () => {
-      if (window.location.hash === "#collections") {
-        window.location.replace("/interests");
-      }
+      const destination = legacySectionRoutes[window.location.hash];
+      if (destination) window.location.replace(destination);
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
@@ -45,8 +52,14 @@ export default function App() {
         >
           <InterestsPage />
         </Suspense>
-      ) : path === "/blog" && window.location.hash === "#collections" ? (
-        <LegacyInterestsRedirect />
+      ) : path === "/projects" ? (
+        <Suspense
+          fallback={<main style={{ padding: 40 }}>正在打开项目页…</main>}
+        >
+          <ProjectsPage />
+        </Suspense>
+      ) : legacyRoute ? (
+        <LegacySectionRedirect to={legacyRoute} />
       ) : path === "/blog" ? (
         <Suspense fallback={<main style={{ padding: 40 }}>正在打开博客…</main>}>
           <BlogPage />

@@ -18,7 +18,7 @@ test("静态部署生成可直接访问的路由，资源保持根路径", async
   try {
     await writeFile(join(directory, "index.html"), html);
     await preparePages(directory);
-    for (const route of ["blog", "diary", "interests"]) {
+    for (const route of ["blog", "diary", "interests", "projects"]) {
       assert.equal(
         await readFile(join(directory, route, "index.html"), "utf8"),
         html,
@@ -28,7 +28,7 @@ test("静态部署生成可直接访问的路由，资源保持根路径", async
     assert.equal(await readFile(join(directory, "404.html"), "utf8"), html);
     assert.ok(!(await readdir(directory)).includes("editor"));
   } finally {
-    for (const route of ["blog", "diary", "interests"]) {
+    for (const route of ["blog", "diary", "interests", "projects"]) {
       await unlink(join(directory, route, "index.html")).catch(() => {});
       await rmdir(join(directory, route)).catch(() => {});
     }
