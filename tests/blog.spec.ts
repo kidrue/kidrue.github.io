@@ -101,6 +101,6 @@ test("移动导航可展开并在跳转后收起", async ({ page }, testInfo) =>
     .getByRole("navigation", { name: "主导航" })
     .getByRole("link", { name: "关于" })
     .click();
-  await expect(page).toHaveURL(/#about$/);
+  await expect(page).toHaveURL(/\/about$/);
   await expect(toggle).toHaveAttribute("aria-expanded", "false");
 });
