@@ -104,9 +104,6 @@ const router = createBrowserRouter([
           ["blog", "diary", "interests", "projects", "quotes"] as PublicPage[]
         ).map((page) => pageRoute(page, () => loadPage(page))),
       },
-      ...(import.meta.env.VITE_STATIC_SITE !== "true"
-        ? [pageRoute("editor", () => import("./editor/EditorPage"))]
-        : []),
       { path: "*", Component: EntryPage },
     ],
   },

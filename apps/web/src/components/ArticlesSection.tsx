@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { type Category, type Post } from "../data/posts";
-import usePublishedPosts from "../hooks/usePublishedPosts";
+import { posts } from "../data/posts";
 import PostCard from "./PostCard";
 import ArticleTimeline from "./ArticleTimeline";
 import ViewSwitcher, { type ListView } from "./ViewSwitcher";
@@ -38,7 +38,6 @@ export default function ArticlesSection({
 }: {
   onRead: (post: Post) => void;
 }) {
-  const { posts, error } = usePublishedPosts();
   const allTags = [...new Set(posts.flatMap((post) => post.tags))];
   const [category, setCategory] = useTabState<"全部" | Category>(
     "articles:category",
@@ -173,11 +172,6 @@ export default function ArticlesSection({
         )}
       </div>
 
-      {error && (
-        <p style={{ color: "var(--muted)", fontSize: 12 }} role="status">
-          {error}
-        </p>
-      )}
       <ViewSwitcher value={view} onChange={setView} label="文章展示方式" />
       {visiblePosts.length > 0 && view === "timeline" ? (
         <ArticleTimeline posts={visiblePosts} onRead={onRead} />

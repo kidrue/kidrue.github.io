@@ -13,7 +13,7 @@ test("本地新增修改删除 Markdown 会更新日记，可打开全文", asyn
   try {
     await writeFile(
       first,
-      "# 日记自动验证\n\n**今天的小事**\n\n- 散步\n- 看书\n\n```js\nconsole.log('hello');\n```",
+      "# 日记自动验证\n\n**今天的小事**\n\n- 散步\n- 看书\n\n```js\nconsole.log('hello');\n```\n\n![片段](/videos/static-test.mp4 \"video\")\n\n[危险链接](javascript:alert(1))\n\n<script>window.unsafe=true</script>",
       { flag: "wx" },
     );
     await writeFile(draft, "# 不展示的日记\n\n这是模板内容。", { flag: "wx" });
@@ -31,6 +31,12 @@ test("本地新增修改删除 Markdown 会更新日记，可打开全文", asyn
     ).toBeVisible();
     await expect(dialog.locator("strong")).toHaveText("今天的小事");
     await expect(dialog.locator("pre")).toContainText("console.log('hello')");
+    await expect(dialog.locator("video")).toHaveAttribute(
+      "src",
+      "/videos/static-test.mp4",
+    );
+    await expect(dialog.locator("script")).toHaveCount(0);
+    await expect(dialog.locator('a[href^="javascript:"]')).toHaveCount(0);
     await page.getByRole("button", { name: "关闭日记" }).click();
     await expect(read).toBeFocused();
     await page.screenshot({ path: testInfo.outputPath("diary.png") });

@@ -1,11 +1,6 @@
 import { expect, test, localPostCount } from "./fixtures";
 
-test("博客园文章在 API 不可用时仍能阅读，保留原始时间与本地图片", async ({
-  page,
-}) => {
-  await page.route("**/api/articles", (route) =>
-    route.fulfill({ status: 503, json: { message: "不可用" } }),
-  );
+test("仓库文章可静态阅读，保留原始时间与本地图片", async ({ page }) => {
   await page.goto("/blog");
   await expect(page.getByRole("article")).toHaveCount(localPostCount);
   await expect(page.getByRole("article").first()).toContainText(

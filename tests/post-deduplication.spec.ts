@@ -42,10 +42,7 @@ test("重复文章只展示完整主版本，旧标题仍可搜索", async ({ pa
   await expect(dialog.locator("pre")).toContainText("$route()");
 });
 
-test("文章服务不可用时仍展示去重后的本地文章", async ({ page }) => {
-  await page.route("**/api/articles", (route) =>
-    route.fulfill({ status: 503, json: { message: "不可用" } }),
-  );
+test("静态文章列表展示去重后的本地文章", async ({ page }) => {
   await page.goto("/blog");
   await expect(page.getByRole("article")).toHaveCount(58);
   await page.getByRole("button", { name: "卡片", exact: true }).click();

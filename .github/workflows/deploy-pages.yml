@@ -24,10 +24,16 @@ jobs:
           cache: npm
       - name: 安装依赖
         run: npm ci
-      - name: 验证静态路由生成
-        run: node --test scripts/pages.test.mjs
+      - name: 检查类型与工具
+        run: npm run typecheck && npm run test:tooling
+      - name: 安装测试浏览器
+        run: npx playwright install --with-deps chrome
+      - name: 验证访客功能与日记热更新
+        run: npm run test:web && npm run test:diary
       - name: 构建静态站点
         run: npm run build:pages
+      - name: 验证静态构建阅读
+        run: npm run test:static
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: apps/web/dist

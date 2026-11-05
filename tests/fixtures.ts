@@ -25,9 +25,6 @@ export const hitokotoFixture = {
 export const test = base.extend<{ mockHitokoto: void }>({
   mockHitokoto: [
     async ({ page }, use) => {
-      await page.route("**/api/articles", (route) =>
-        route.fulfill({ json: { articles: [] } }),
-      );
       await page.route("https://v1.hitokoto.cn/**", (route) =>
         route.fulfill({ json: hitokotoFixture }),
       );

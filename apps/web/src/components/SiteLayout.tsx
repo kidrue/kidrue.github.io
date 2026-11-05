@@ -11,10 +11,7 @@ const navigation = [
   { id: "quotes", label: "一句话", href: "/quotes" },
   { id: "projects", label: "项目", href: "/projects" },
   { id: "about", label: "关于", href: "/blog#about" },
-  { id: "editor", label: "写作", href: "/editor" },
-].filter(
-  (item) => import.meta.env.VITE_STATIC_SITE !== "true" || item.id !== "editor",
-);
+];
 
 function Brand() {
   return (
@@ -122,7 +119,6 @@ export default function SiteLayout({
                       : item.href
                   }
                   onClick={() => setMenuOpen(false)}
-                  reloadDocument={item.id === "editor"}
                   className={activeSection === item.id ? "active" : ""}
                   aria-current={
                     activeSection === item.id

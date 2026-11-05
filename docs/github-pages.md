@@ -4,7 +4,7 @@
 
 每次推送到 main，`.github/workflows/deploy-pages.yml` 自动安装依赖、验证静态路由、运行 `npm run build:pages`，把 `apps/web/dist/` 发布到 GitHub Pages。也可在 Actions 中手动运行。无需 VPS 或额外部署密钥；仓库 Settings → Pages 的 Source 必须为 GitHub Actions。
 
-静态构建保留本地文章、日记、兴趣、项目和关于页面。静态站点不提供数据库与在线写作接口，因此不请求 `/api/articles`，不显示在线写作入口。普通开发和完整服务端构建保持原行为。
+静态构建保留本地文章、日记、兴趣、项目和关于页面。开发、预览和线上均为纯静态模式，无数据库、在线写作或自有 API。
 
 构建为 `/blog/`、`/diary/`、`/interests/`、`/projects/`、`/quotes/` 生成独立 index.html，支持直接访问与刷新。项目和一句话均使用独立页面，旧 `/blog#projects`、`/blog#quotes` 链接自动跳转。站点位于用户主页仓库和自定义域名根路径，Vite base 为 `/`。仅上传前端构建目录，不上传 env.local 或数据库。
 

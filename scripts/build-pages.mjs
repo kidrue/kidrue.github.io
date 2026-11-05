@@ -6,10 +6,9 @@ if (!process.env.npm_execpath)
   throw new Error("请使用 npm run build:pages 构建。");
 const result = spawnSync(
   process.execPath,
-  [process.env.npm_execpath, "run", "build:web"],
+  [process.env.npm_execpath, "run", "build", "-w", "@kidrue/web"],
   {
     cwd: fileURLToPath(new URL("../", import.meta.url)),
-    env: { ...process.env, VITE_STATIC_SITE: "true" },
     stdio: "inherit",
     windowsHide: true,
   },
