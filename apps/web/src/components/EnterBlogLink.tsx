@@ -26,13 +26,20 @@ export default function EnterBlogLink() {
   }, [launching, navigate]);
 
   useEffect(() => {
-    const reset = (event: PageTransitionEvent) => {
-      if (!event.persisted) return;
+    const resetLaunch = () => {
       navigated.current = false;
       setLaunching(false);
     };
+    const reset = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      resetLaunch();
+    };
     window.addEventListener("pageshow", reset);
-    return () => window.removeEventListener("pageshow", reset);
+    window.addEventListener("popstate", resetLaunch);
+    return () => {
+      window.removeEventListener("pageshow", reset);
+      window.removeEventListener("popstate", resetLaunch);
+    };
   }, []);
 
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {

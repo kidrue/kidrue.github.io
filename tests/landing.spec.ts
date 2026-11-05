@@ -10,6 +10,9 @@ test("进入博客先播放起飞效果，返回入口后仍可再次进入", as
   await expect(
     page.getByRole("heading", { name: "kidrue", exact: true }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "进入博客", exact: true }),
+  ).toHaveAttribute("aria-busy", "false");
   await page
     .getByRole("link", { name: "进入博客", exact: true })
     .press("Enter");
