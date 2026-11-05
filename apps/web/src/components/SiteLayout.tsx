@@ -10,7 +10,7 @@ const navigation = [
   { id: "interests", label: "兴趣", href: "/interests" },
   { id: "quotes", label: "一句话", href: "/quotes" },
   { id: "projects", label: "项目", href: "/projects" },
-  { id: "about", label: "关于", href: "/blog#about" },
+  { id: "about", label: "关于", href: "/about" },
 ];
 
 function Brand() {
@@ -32,7 +32,7 @@ export default function SiteLayout({
   children,
   loading = false,
 }: {
-  page: "blog" | "interests" | "diary" | "projects" | "quotes";
+  page: "blog" | "interests" | "diary" | "projects" | "quotes" | "about";
   children: ReactNode;
   loading?: boolean;
 }) {
@@ -44,6 +44,7 @@ export default function SiteLayout({
     diary: "日记",
     projects: "项目",
     quotes: "一句话",
+    about: "关于",
   }[page];
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);

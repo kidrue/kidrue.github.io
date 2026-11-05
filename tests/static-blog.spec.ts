@@ -19,6 +19,7 @@ test("无 API 时所有访客栏目可直接访问、刷新，且没有管理员
     "/interests/",
     "/projects/",
     "/quotes/",
+    "/about/",
   ]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

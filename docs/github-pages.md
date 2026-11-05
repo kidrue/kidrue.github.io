@@ -6,7 +6,7 @@
 
 静态构建保留本地文章、日记、兴趣、项目和关于页面。开发、预览和线上均为纯静态模式，无数据库、在线写作或自有 API。
 
-构建为 `/blog/`、`/diary/`、`/interests/`、`/projects/`、`/quotes/` 生成独立 index.html，支持直接访问与刷新。项目和一句话均使用独立页面，旧 `/blog#projects`、`/blog#quotes` 链接自动跳转。站点位于用户主页仓库和自定义域名根路径，Vite base 为 `/`。仅上传前端构建目录，不上传 env.local 或数据库。
+构建为 `/blog/`、`/diary/`、`/interests/`、`/projects/`、`/quotes/`、`/about/` 生成独立 index.html，支持直接访问与刷新。项目和一句话均使用独立页面，旧 `/blog#projects`、`/blog#quotes`、`/blog#about` 链接自动跳转。站点位于用户主页仓库和自定义域名根路径，Vite base 为 `/`。仅上传前端构建目录，不上传 env.local 或数据库。
 
 ## 域名手动配置
 

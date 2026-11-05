@@ -113,7 +113,8 @@ test("前进后退恢复位置，独立栏目和博客锚点均能跳转", async
   await openTab(page, "文章");
   await expect(page.locator("#articles-title")).toBeInViewport();
   await openTab(page, "关于");
-  await expect(page.locator("#about h2")).toBeInViewport();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("关于我。");
   await openTab(page, "文章");
   await expect(page.locator("#articles-title")).toBeInViewport();
 });

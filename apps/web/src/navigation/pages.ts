@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 
 export const pageLoaders = {
+  about: () => import("../AboutPage"),
   blog: () => import("../BlogPage"),
   interests: () => import("../InterestsPage"),
   diary: () => import("../DiaryPage"),

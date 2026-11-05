@@ -23,6 +23,7 @@ const legacySectionRoutes: Record<string, string> = {
   "#collections": "/interests",
   "#projects": "/projects",
   "#quotes": "/quotes",
+  "#about": "/about",
 };
 
 function PublicLayout() {
@@ -101,7 +102,14 @@ const router = createBrowserRouter([
       {
         Component: PublicLayout,
         children: (
-          ["blog", "diary", "interests", "projects", "quotes"] as PublicPage[]
+          [
+            "blog",
+            "diary",
+            "interests",
+            "projects",
+            "quotes",
+            "about",
+          ] as PublicPage[]
         ).map((page) => pageRoute(page, () => loadPage(page))),
       },
       { path: "*", Component: EntryPage },
