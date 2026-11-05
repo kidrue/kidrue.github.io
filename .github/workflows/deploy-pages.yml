@@ -27,7 +27,12 @@ jobs:
       - name: 检查类型与工具
         run: npm run typecheck && npm run test:tooling
       - name: 安装测试浏览器
-        run: npx playwright install --with-deps chrome
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            google-chrome --version
+          else
+            npx playwright install --with-deps chrome
+          fi
       - name: 验证访客功能与日记热更新
         run: npm run test:web && npm run test:diary
       - name: 构建静态站点

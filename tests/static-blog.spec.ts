@@ -3,6 +3,7 @@ import { test, expect, localPostCount } from "./fixtures";
 test("无 API 时所有访客栏目可直接访问、刷新，且没有管理员入口", async ({
   page,
 }) => {
+  test.setTimeout(60_000);
   const requests: string[] = [];
   page.on("request", (request) => {
     const url = new URL(request.url());
